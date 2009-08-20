@@ -71,7 +71,7 @@
    <widget class="QWidget" name="tab">
     <attribute name="icon">
      <iconset>
-      <normalon>resources/game_button.png</normalon>
+      <normalon>:/resources/resources/game_button.png</normalon>
      </iconset>
     </attribute>
     <attribute name="title">
@@ -523,7 +523,7 @@
     </property>
     <attribute name="icon">
      <iconset>
-      <normalon>resources/stats_button.png</normalon>
+      <normalon>:/resources/resources/stats_button.png</normalon>
      </iconset>
     </attribute>
     <attribute name="title">
@@ -536,7 +536,7 @@
     </property>
     <attribute name="icon">
      <iconset>
-      <normalon>resources/pc_ai_button.png</normalon>
+      <normalon>:/resources/resources/pc_ai_button.png</normalon>
      </iconset>
     </attribute>
     <attribute name="title">
@@ -557,7 +557,7 @@
     <string/>
    </property>
    <property name="pixmap">
-    <pixmap>resources/background.png</pixmap>
+    <pixmap resource="images.qrc">:/resources/resources/background.png</pixmap>
    </property>
   </widget>
   <widget class="QLabel" name="label_9">
@@ -573,7 +573,7 @@
     <string/>
    </property>
    <property name="pixmap">
-    <pixmap>resources/xt.png</pixmap>
+    <pixmap resource="images.qrc">:/resources/resources/xt.png</pixmap>
    </property>
   </widget>
   <widget class="QFrame" name="frame">
@@ -671,7 +671,7 @@
      <string/>
     </property>
     <property name="pixmap">
-     <pixmap>resources/score_board.png</pixmap>
+     <pixmap resource="images.qrc">:/resources/resources/score_board.png</pixmap>
     </property>
    </widget>
    <widget class="QLabel" name="label_6">
@@ -719,7 +719,7 @@
      <string/>
     </property>
     <property name="pixmap">
-     <pixmap>resources/knight_example.png</pixmap>
+     <pixmap resource="images.qrc">:/resources/resources/knight_example.png</pixmap>
     </property>
    </widget>
    <widget class="QLabel" name="label_15">
@@ -735,7 +735,7 @@
      <string/>
     </property>
     <property name="pixmap">
-     <pixmap>resources/knight_example_2.png</pixmap>
+     <pixmap resource="images.qrc">:/resources/resources/knight_example_2.png</pixmap>
     </property>
    </widget>
    <widget class="QPushButton" name="pushButton_6">
@@ -802,6 +802,8 @@
   <zorder>label_9</zorder>
   <zorder>frame</zorder>
  </widget>
- <resources/>
+ <resources>
+  <include location="images.qrc"/>
+ </resources>
  <connections/>
 </ui>

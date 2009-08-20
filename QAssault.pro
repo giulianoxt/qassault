@@ -7,4 +7,6 @@ SOURCES += main.cpp \
     assaultmainwindow.cpp
 HEADERS += assaultmainwindow.h
 FORMS += assaultmainwindow.ui
-
+CONFIG += console
+RESOURCES += images.qrc
+OTHER_FILES += 

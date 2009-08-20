@@ -7,12 +7,7 @@ using namespace std;
 AssaultMainWindow::AssaultMainWindow(QWidget *parent)
     : QWidget(parent), ui(new Ui::AssaultMainWindow)
 {
-    ui->setupUi(this);
-    
-    cout << "Construtor" << endl;
-    
-    cout << ui->label->pixmap()->isNull() << endl;
-    
+    ui->setupUi(this);   
 }
 
 AssaultMainWindow::~AssaultMainWindow()
