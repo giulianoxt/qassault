@@ -7,4 +7,4 @@ SOURCES += main.cpp \
     assaultmainwindow.cpp
 HEADERS += assaultmainwindow.h
 FORMS += assaultmainwindow.ui
-OTHER_FILES += 
+
