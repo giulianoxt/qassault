@@ -38,13 +38,14 @@
  </data>
  <data>
   <variable>activebuildconfiguration</variable>
-  <value type="QString" >Debug</value>
+  <value type="QString" >Release</value>
  </data>
  <data>
   <variable>buildConfiguration-Debug</variable>
   <valuemap type="QVariantMap" >
    <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString" >Debug</value>
    <value key="QtVersionId" type="int" >0</value>
+   <value key="addQDumper" type="" ></value>
   </valuemap>
  </data>
  <data>
@@ -52,12 +53,54 @@
   <valuemap type="QVariantMap" >
    <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString" >Release</value>
    <value key="QtVersionId" type="int" >0</value>
+   <value key="addQDumper" type="" ></value>
   </valuemap>
  </data>
  <data>
   <variable>buildconfiguration-Debug-buildstep0</variable>
   <valuemap type="QVariantMap" >
    <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString" >Debug</value>
+   <valuelist key="abstractProcess.Environment" type="QVariantList" >
+    <value type="QString" >ALLUSERSPROFILE=C:\Documents and Settings\All Users</value>
+    <value type="QString" >APPDATA=C:\Documents and Settings\Usuario\Dados de aplicativos</value>
+    <value type="QString" >CLIENTNAME=Console</value>
+    <value type="QString" >COMMONPROGRAMFILES=C:\Arquivos de programas\Arquivos comuns</value>
+    <value type="QString" >COMPUTERNAME=SKYNET</value>
+    <value type="QString" >COMSPEC=C:\WINDOWS.0\system32\cmd.exe</value>
+    <value type="QString" >FP_NO_HOST_CHECK=NO</value>
+    <value type="QString" >HOMEDRIVE=C:</value>
+    <value type="QString" >HOMEPATH=\Documents and Settings\Usuario</value>
+    <value type="QString" >LOGONSERVER=\\SKYNET</value>
+    <value type="QString" >NUMBER_OF_PROCESSORS=2</value>
+    <value type="QString" >OS=Windows_NT</value>
+    <value type="QString" >PATH=C:\Qt\2009.03\mingw\bin;C:\Qt\2009.03\qt\bin;C:\Arquivos de programas\CollabNet Subversion Client;C:\WINDOWS.0\system32;C:\WINDOWS.0;C:\WINDOWS.0\System32\Wbem;C:\Arquivos de programas\upx303w;C:\Arquivos de programas\Arquivos comuns\Nero\Lib\</value>
+    <value type="QString" >PATHEXT=.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH</value>
+    <value type="QString" >PROCESSOR_ARCHITECTURE=x86</value>
+    <value type="QString" >PROCESSOR_IDENTIFIER=x86 Family 6 Model 15 Stepping 13, GenuineIntel</value>
+    <value type="QString" >PROCESSOR_LEVEL=6</value>
+    <value type="QString" >PROCESSOR_REVISION=0f0d</value>
+    <value type="QString" >PROGRAMFILES=C:\Arquivos de programas</value>
+    <value type="QString" >QTDIR=C:/Qt/2009.03/qt</value>
+    <value type="QString" >SESSIONNAME=Console</value>
+    <value type="QString" >SYSTEMDRIVE=C:</value>
+    <value type="QString" >SYSTEMROOT=C:\WINDOWS.0</value>
+    <value type="QString" >TEMP=C:\DOCUME~1\Usuario\CONFIG~1\Temp</value>
+    <value type="QString" >TMP=C:\DOCUME~1\Usuario\CONFIG~1\Temp</value>
+    <value type="QString" >USERDOMAIN=SKYNET</value>
+    <value type="QString" >USERNAME=Usuario</value>
+    <value type="QString" >USERPROFILE=C:\Documents and Settings\Usuario</value>
+    <value type="QString" >WINDIR=C:\WINDOWS.0</value>
+   </valuelist>
+   <valuelist key="abstractProcess.arguments" type="QVariantList" >
+    <value type="QString" >C:/GiulianoXT/workspace/QAssault/QAssault.pro</value>
+    <value type="QString" >-spec</value>
+    <value type="QString" >win32-g++</value>
+    <value type="QString" >-r</value>
+    <value type="QString" >CONFIG+=debug</value>
+   </valuelist>
+   <value key="abstractProcess.command" type="QString" >C:/Qt/2009.03/qt/bin/qmake.exe</value>
+   <value key="abstractProcess.enabled" type="bool" >false</value>
+   <value key="abstractProcess.workingDirectory" type="QString" >C:/GiulianoXT/workspace/QAssault</value>
    <value key="buildConfiguration" type="int" >2</value>
   </valuemap>
  </data>
@@ -65,6 +108,43 @@
   <variable>buildconfiguration-Debug-buildstep1</variable>
   <valuemap type="QVariantMap" >
    <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString" >Debug</value>
+   <valuelist key="abstractProcess.Environment" type="QVariantList" >
+    <value type="QString" >ALLUSERSPROFILE=C:\Documents and Settings\All Users</value>
+    <value type="QString" >APPDATA=C:\Documents and Settings\Usuario\Dados de aplicativos</value>
+    <value type="QString" >CLIENTNAME=Console</value>
+    <value type="QString" >COMMONPROGRAMFILES=C:\Arquivos de programas\Arquivos comuns</value>
+    <value type="QString" >COMPUTERNAME=SKYNET</value>
+    <value type="QString" >COMSPEC=C:\WINDOWS.0\system32\cmd.exe</value>
+    <value type="QString" >FP_NO_HOST_CHECK=NO</value>
+    <value type="QString" >HOMEDRIVE=C:</value>
+    <value type="QString" >HOMEPATH=\Documents and Settings\Usuario</value>
+    <value type="QString" >LOGONSERVER=\\SKYNET</value>
+    <value type="QString" >NUMBER_OF_PROCESSORS=2</value>
+    <value type="QString" >OS=Windows_NT</value>
+    <value type="QString" >PATH=C:\Qt\2009.03\mingw\bin;C:\Qt\2009.03\qt\bin;C:\Arquivos de programas\CollabNet Subversion Client;C:\WINDOWS.0\system32;C:\WINDOWS.0;C:\WINDOWS.0\System32\Wbem;C:\Arquivos de programas\upx303w;C:\Arquivos de programas\Arquivos comuns\Nero\Lib\</value>
+    <value type="QString" >PATHEXT=.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH</value>
+    <value type="QString" >PROCESSOR_ARCHITECTURE=x86</value>
+    <value type="QString" >PROCESSOR_IDENTIFIER=x86 Family 6 Model 15 Stepping 13, GenuineIntel</value>
+    <value type="QString" >PROCESSOR_LEVEL=6</value>
+    <value type="QString" >PROCESSOR_REVISION=0f0d</value>
+    <value type="QString" >PROGRAMFILES=C:\Arquivos de programas</value>
+    <value type="QString" >QTDIR=C:/Qt/2009.03/qt</value>
+    <value type="QString" >SESSIONNAME=Console</value>
+    <value type="QString" >SYSTEMDRIVE=C:</value>
+    <value type="QString" >SYSTEMROOT=C:\WINDOWS.0</value>
+    <value type="QString" >TEMP=C:\DOCUME~1\Usuario\CONFIG~1\Temp</value>
+    <value type="QString" >TMP=C:\DOCUME~1\Usuario\CONFIG~1\Temp</value>
+    <value type="QString" >USERDOMAIN=SKYNET</value>
+    <value type="QString" >USERNAME=Usuario</value>
+    <value type="QString" >USERPROFILE=C:\Documents and Settings\Usuario</value>
+    <value type="QString" >WINDIR=C:\WINDOWS.0</value>
+   </valuelist>
+   <valuelist key="abstractProcess.arguments" type="QVariantList" >
+    <value type="QString" >-w</value>
+   </valuelist>
+   <value key="abstractProcess.command" type="QString" >C:/Qt/2009.03/mingw/bin/mingw32-make.exe</value>
+   <value key="abstractProcess.enabled" type="bool" >true</value>
+   <value key="abstractProcess.workingDirectory" type="QString" >C:/GiulianoXT/workspace/QAssault</value>
   </valuemap>
  </data>
  <data>
@@ -77,6 +157,47 @@
   <variable>buildconfiguration-Release-buildstep0</variable>
   <valuemap type="QVariantMap" >
    <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString" >Release</value>
+   <valuelist key="abstractProcess.Environment" type="QVariantList" >
+    <value type="QString" >ALLUSERSPROFILE=C:\Documents and Settings\All Users</value>
+    <value type="QString" >APPDATA=C:\Documents and Settings\Usuario\Dados de aplicativos</value>
+    <value type="QString" >CLIENTNAME=Console</value>
+    <value type="QString" >COMMONPROGRAMFILES=C:\Arquivos de programas\Arquivos comuns</value>
+    <value type="QString" >COMPUTERNAME=SKYNET</value>
+    <value type="QString" >COMSPEC=C:\WINDOWS.0\system32\cmd.exe</value>
+    <value type="QString" >FP_NO_HOST_CHECK=NO</value>
+    <value type="QString" >HOMEDRIVE=C:</value>
+    <value type="QString" >HOMEPATH=\Documents and Settings\Usuario</value>
+    <value type="QString" >LOGONSERVER=\\SKYNET</value>
+    <value type="QString" >NUMBER_OF_PROCESSORS=2</value>
+    <value type="QString" >OS=Windows_NT</value>
+    <value type="QString" >PATH=C:\Qt\2009.03\mingw\bin;C:\Qt\2009.03\qt\bin;C:\Arquivos de programas\CollabNet Subversion Client;C:\WINDOWS.0\system32;C:\WINDOWS.0;C:\WINDOWS.0\System32\Wbem;C:\Arquivos de programas\upx303w;C:\Arquivos de programas\Arquivos comuns\Nero\Lib\;C:\Arquivos de programas\Arquivos comuns\Nero\Lib\;C:\Arquivos de programas\Arquivos comuns\Nero\Lib\;C:\Arquivos de programas\Arquivos comuns\Nero\Lib\</value>
+    <value type="QString" >PATHEXT=.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH</value>
+    <value type="QString" >PROCESSOR_ARCHITECTURE=x86</value>
+    <value type="QString" >PROCESSOR_IDENTIFIER=x86 Family 6 Model 15 Stepping 13, GenuineIntel</value>
+    <value type="QString" >PROCESSOR_LEVEL=6</value>
+    <value type="QString" >PROCESSOR_REVISION=0f0d</value>
+    <value type="QString" >PROGRAMFILES=C:\Arquivos de programas</value>
+    <value type="QString" >QTDIR=C:/Qt/2009.03/qt</value>
+    <value type="QString" >SESSIONNAME=Console</value>
+    <value type="QString" >SYSTEMDRIVE=C:</value>
+    <value type="QString" >SYSTEMROOT=C:\WINDOWS.0</value>
+    <value type="QString" >TEMP=C:\DOCUME~1\Usuario\CONFIG~1\Temp</value>
+    <value type="QString" >TMP=C:\DOCUME~1\Usuario\CONFIG~1\Temp</value>
+    <value type="QString" >USERDOMAIN=SKYNET</value>
+    <value type="QString" >USERNAME=Usuario</value>
+    <value type="QString" >USERPROFILE=C:\Documents and Settings\Usuario</value>
+    <value type="QString" >WINDIR=C:\WINDOWS.0</value>
+   </valuelist>
+   <valuelist key="abstractProcess.arguments" type="QVariantList" >
+    <value type="QString" >C:/GiulianoXT/workspace/QAssault/QAssault.pro</value>
+    <value type="QString" >-spec</value>
+    <value type="QString" >win32-g++</value>
+    <value type="QString" >-r</value>
+    <value type="QString" >CONFIG+=release</value>
+   </valuelist>
+   <value key="abstractProcess.command" type="QString" >C:/Qt/2009.03/qt/bin/qmake.exe</value>
+   <value key="abstractProcess.enabled" type="bool" >false</value>
+   <value key="abstractProcess.workingDirectory" type="QString" >C:/GiulianoXT/workspace/QAssault</value>
    <value key="buildConfiguration" type="int" >0</value>
   </valuemap>
  </data>
@@ -84,12 +205,87 @@
   <variable>buildconfiguration-Release-buildstep1</variable>
   <valuemap type="QVariantMap" >
    <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString" >Release</value>
+   <valuelist key="abstractProcess.Environment" type="QVariantList" >
+    <value type="QString" >ALLUSERSPROFILE=C:\Documents and Settings\All Users</value>
+    <value type="QString" >APPDATA=C:\Documents and Settings\Usuario\Dados de aplicativos</value>
+    <value type="QString" >CLIENTNAME=Console</value>
+    <value type="QString" >COMMONPROGRAMFILES=C:\Arquivos de programas\Arquivos comuns</value>
+    <value type="QString" >COMPUTERNAME=SKYNET</value>
+    <value type="QString" >COMSPEC=C:\WINDOWS.0\system32\cmd.exe</value>
+    <value type="QString" >FP_NO_HOST_CHECK=NO</value>
+    <value type="QString" >HOMEDRIVE=C:</value>
+    <value type="QString" >HOMEPATH=\Documents and Settings\Usuario</value>
+    <value type="QString" >LOGONSERVER=\\SKYNET</value>
+    <value type="QString" >NUMBER_OF_PROCESSORS=2</value>
+    <value type="QString" >OS=Windows_NT</value>
+    <value type="QString" >PATH=C:\Qt\2009.03\mingw\bin;C:\Qt\2009.03\qt\bin;C:\Arquivos de programas\CollabNet Subversion Client;C:\WINDOWS.0\system32;C:\WINDOWS.0;C:\WINDOWS.0\System32\Wbem;C:\Arquivos de programas\upx303w;C:\Arquivos de programas\Arquivos comuns\Nero\Lib\;C:\Arquivos de programas\Arquivos comuns\Nero\Lib\;C:\Arquivos de programas\Arquivos comuns\Nero\Lib\;C:\Arquivos de programas\Arquivos comuns\Nero\Lib\</value>
+    <value type="QString" >PATHEXT=.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH</value>
+    <value type="QString" >PROCESSOR_ARCHITECTURE=x86</value>
+    <value type="QString" >PROCESSOR_IDENTIFIER=x86 Family 6 Model 15 Stepping 13, GenuineIntel</value>
+    <value type="QString" >PROCESSOR_LEVEL=6</value>
+    <value type="QString" >PROCESSOR_REVISION=0f0d</value>
+    <value type="QString" >PROGRAMFILES=C:\Arquivos de programas</value>
+    <value type="QString" >QTDIR=C:/Qt/2009.03/qt</value>
+    <value type="QString" >SESSIONNAME=Console</value>
+    <value type="QString" >SYSTEMDRIVE=C:</value>
+    <value type="QString" >SYSTEMROOT=C:\WINDOWS.0</value>
+    <value type="QString" >TEMP=C:\DOCUME~1\Usuario\CONFIG~1\Temp</value>
+    <value type="QString" >TMP=C:\DOCUME~1\Usuario\CONFIG~1\Temp</value>
+    <value type="QString" >USERDOMAIN=SKYNET</value>
+    <value type="QString" >USERNAME=Usuario</value>
+    <value type="QString" >USERPROFILE=C:\Documents and Settings\Usuario</value>
+    <value type="QString" >WINDIR=C:\WINDOWS.0</value>
+   </valuelist>
+   <valuelist key="abstractProcess.arguments" type="QVariantList" >
+    <value type="QString" >-w</value>
+   </valuelist>
+   <value key="abstractProcess.command" type="QString" >C:/Qt/2009.03/mingw/bin/mingw32-make.exe</value>
+   <value key="abstractProcess.enabled" type="bool" >true</value>
+   <value key="abstractProcess.workingDirectory" type="QString" >C:/GiulianoXT/workspace/QAssault</value>
   </valuemap>
  </data>
  <data>
   <variable>buildconfiguration-Release-cleanstep0</variable>
   <valuemap type="QVariantMap" >
    <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString" >Release</value>
+   <valuelist key="abstractProcess.Environment" type="QVariantList" >
+    <value type="QString" >ALLUSERSPROFILE=C:\Documents and Settings\All Users</value>
+    <value type="QString" >APPDATA=C:\Documents and Settings\Usuario\Dados de aplicativos</value>
+    <value type="QString" >CLIENTNAME=Console</value>
+    <value type="QString" >COMMONPROGRAMFILES=C:\Arquivos de programas\Arquivos comuns</value>
+    <value type="QString" >COMPUTERNAME=SKYNET</value>
+    <value type="QString" >COMSPEC=C:\WINDOWS.0\system32\cmd.exe</value>
+    <value type="QString" >FP_NO_HOST_CHECK=NO</value>
+    <value type="QString" >HOMEDRIVE=C:</value>
+    <value type="QString" >HOMEPATH=\Documents and Settings\Usuario</value>
+    <value type="QString" >LOGONSERVER=\\SKYNET</value>
+    <value type="QString" >NUMBER_OF_PROCESSORS=2</value>
+    <value type="QString" >OS=Windows_NT</value>
+    <value type="QString" >PATH=C:\Qt\2009.03\mingw\bin;C:\Qt\2009.03\qt\bin;C:\Arquivos de programas\CollabNet Subversion Client;C:\WINDOWS.0\system32;C:\WINDOWS.0;C:\WINDOWS.0\System32\Wbem;C:\Arquivos de programas\upx303w;C:\Arquivos de programas\Arquivos comuns\Nero\Lib\;C:\Arquivos de programas\Arquivos comuns\Nero\Lib\;C:\Arquivos de programas\Arquivos comuns\Nero\Lib\;C:\Arquivos de programas\Arquivos comuns\Nero\Lib\</value>
+    <value type="QString" >PATHEXT=.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH</value>
+    <value type="QString" >PROCESSOR_ARCHITECTURE=x86</value>
+    <value type="QString" >PROCESSOR_IDENTIFIER=x86 Family 6 Model 15 Stepping 13, GenuineIntel</value>
+    <value type="QString" >PROCESSOR_LEVEL=6</value>
+    <value type="QString" >PROCESSOR_REVISION=0f0d</value>
+    <value type="QString" >PROGRAMFILES=C:\Arquivos de programas</value>
+    <value type="QString" >QTDIR=C:/Qt/2009.03/qt</value>
+    <value type="QString" >SESSIONNAME=Console</value>
+    <value type="QString" >SYSTEMDRIVE=C:</value>
+    <value type="QString" >SYSTEMROOT=C:\WINDOWS.0</value>
+    <value type="QString" >TEMP=C:\DOCUME~1\Usuario\CONFIG~1\Temp</value>
+    <value type="QString" >TMP=C:\DOCUME~1\Usuario\CONFIG~1\Temp</value>
+    <value type="QString" >USERDOMAIN=SKYNET</value>
+    <value type="QString" >USERNAME=Usuario</value>
+    <value type="QString" >USERPROFILE=C:\Documents and Settings\Usuario</value>
+    <value type="QString" >WINDIR=C:\WINDOWS.0</value>
+   </valuelist>
+   <valuelist key="abstractProcess.arguments" type="QVariantList" >
+    <value type="QString" >clean</value>
+    <value type="QString" >-w</value>
+   </valuelist>
+   <value key="abstractProcess.command" type="QString" >C:/Qt/2009.03/mingw/bin/mingw32-make.exe</value>
+   <value key="abstractProcess.enabled" type="bool" >true</value>
+   <value key="abstractProcess.workingDirectory" type="QString" >C:/GiulianoXT/workspace/QAssault</value>
   </valuemap>
  </data>
  <data>
