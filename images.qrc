@@ -1,5 +1,7 @@
 <RCC>
   <qresource prefix="resources" >
+    <file>resources/icon.png</file>
+    <file>resources/board.png</file>
     <file>resources/background.png</file>
     <file>resources/game_button.png</file>
     <file>resources/knight_example.png</file>

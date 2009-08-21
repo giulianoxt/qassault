@@ -16,5 +16,7 @@ AssaultMainWindow::~AssaultMainWindow()
 void AssaultMainWindow::setupUi()
 {    
     ui->setupUi(this);    
-    ui->graphicsView->setScene(new AssaultScene);
+    
+    ui->boardGraphicsView->setStyleSheet("background: transparent");
+    ui->boardGraphicsView->setScene(new AssaultScene);
 }

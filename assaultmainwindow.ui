@@ -13,7 +13,11 @@
   <property name="windowTitle">
    <string>QAssault</string>
   </property>
-  <widget class="QGraphicsView" name="graphicsView">
+  <property name="windowIcon">
+   <iconset resource="images.qrc">
+    <normaloff>:/resources/resources/icon.png</normaloff>:/resources/resources/icon.png</iconset>
+  </property>
+  <widget class="QGraphicsView" name="boardGraphicsView">
    <property name="geometry">
     <rect>
      <x>230</x>
@@ -68,7 +72,7 @@
    <property name="movable">
     <bool>false</bool>
    </property>
-   <widget class="QWidget" name="tab">
+   <widget class="QWidget" name="gameTab">
     <attribute name="icon">
      <iconset>
       <normalon>:/resources/resources/game_button.png</normalon>
@@ -77,46 +81,6 @@
     <attribute name="title">
      <string/>
     </attribute>
-    <widget class="QWidget" name="gridLayoutWidget">
-     <property name="geometry">
-      <rect>
-       <x>20</x>
-       <y>10</y>
-       <width>131</width>
-       <height>61</height>
-      </rect>
-     </property>
-     <layout class="QGridLayout" name="gridLayout">
-      <item row="0" column="0">
-       <widget class="QPushButton" name="pushButton">
-        <property name="text">
-         <string>New</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="QPushButton" name="pushButton_2">
-        <property name="text">
-         <string>Save</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QPushButton" name="pushButton_3">
-        <property name="text">
-         <string>Close</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="QPushButton" name="pushButton_4">
-        <property name="text">
-         <string>Exit</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
     <widget class="QGroupBox" name="groupBox">
      <property name="enabled">
       <bool>true</bool>
@@ -141,7 +105,7 @@
      <property name="checkable">
       <bool>false</bool>
      </property>
-     <widget class="QPushButton" name="pushButton_5">
+     <widget class="QPushButton" name="startGameButton">
       <property name="geometry">
        <rect>
         <x>30</x>
@@ -167,12 +131,12 @@
        <enum>QTabWidget::Rounded</enum>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <property name="documentMode">
        <bool>true</bool>
       </property>
-      <widget class="QWidget" name="tab_4">
+      <widget class="QWidget" name="knightsTab">
        <attribute name="title">
         <string>Knights</string>
        </attribute>
@@ -188,16 +152,6 @@
         <property name="title">
          <string>Character</string>
         </property>
-        <widget class="QGraphicsView" name="graphicsView_2">
-         <property name="geometry">
-          <rect>
-           <x>60</x>
-           <y>25</y>
-           <width>91</width>
-           <height>106</height>
-          </rect>
-         </property>
-        </widget>
         <widget class="QRadioButton" name="radioButton_2">
          <property name="geometry">
           <rect>
@@ -263,7 +217,7 @@
           <string>Color:</string>
          </property>
         </widget>
-        <widget class="QSlider" name="horizontalSlider">
+        <widget class="QSlider" name="knightsColorSlider">
          <property name="geometry">
           <rect>
            <x>10</x>
@@ -276,7 +230,7 @@
           <enum>Qt::Horizontal</enum>
          </property>
         </widget>
-        <widget class="QSlider" name="horizontalSlider_2">
+        <widget class="QSlider" name="knightsSizeSlider">
          <property name="geometry">
           <rect>
            <x>10</x>
@@ -302,8 +256,36 @@
           <string>Size:</string>
          </property>
         </widget>
+        <widget class="QLabel" name="knightsPicture">
+         <property name="geometry">
+          <rect>
+           <x>85</x>
+           <y>25</y>
+           <width>66</width>
+           <height>106</height>
+          </rect>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::StyledPanel</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Plain</enum>
+         </property>
+         <property name="lineWidth">
+          <number>1</number>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="pixmap">
+          <pixmap resource="images.qrc">:/resources/resources/knight_example_2.png</pixmap>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
        </widget>
-       <widget class="QGroupBox" name="groupBox_3">
+       <widget class="QGroupBox" name="controlGroupBox">
         <property name="geometry">
          <rect>
           <x>0</x>
@@ -315,7 +297,7 @@
         <property name="title">
          <string>Control</string>
         </property>
-        <widget class="QRadioButton" name="radioButton">
+        <widget class="QRadioButton" name="knightsHumanRadioButton">
          <property name="geometry">
           <rect>
            <x>5</x>
@@ -328,7 +310,7 @@
           <string>Human</string>
          </property>
         </widget>
-        <widget class="QRadioButton" name="radioButton_6">
+        <widget class="QRadioButton" name="knightsComputerRadioButton">
          <property name="geometry">
           <rect>
            <x>80</x>
@@ -343,11 +325,11 @@
         </widget>
        </widget>
       </widget>
-      <widget class="QWidget" name="tab_5">
+      <widget class="QWidget" name="pawnsTab">
        <attribute name="title">
         <string>Pawns</string>
        </attribute>
-       <widget class="QGroupBox" name="groupBox_4">
+       <widget class="QGroupBox" name="controlGroupBox_2">
         <property name="geometry">
          <rect>
           <x>0</x>
@@ -359,7 +341,7 @@
         <property name="title">
          <string>Control</string>
         </property>
-        <widget class="QRadioButton" name="radioButton_7">
+        <widget class="QRadioButton" name="pawnsHumanRadioButton">
          <property name="geometry">
           <rect>
            <x>5</x>
@@ -372,7 +354,7 @@
           <string>Human</string>
          </property>
         </widget>
-        <widget class="QRadioButton" name="radioButton_8">
+        <widget class="QRadioButton" name="pawnsComputerRadioButton">
          <property name="geometry">
           <rect>
            <x>80</x>
@@ -398,16 +380,6 @@
         <property name="title">
          <string>Character</string>
         </property>
-        <widget class="QGraphicsView" name="graphicsView_3">
-         <property name="geometry">
-          <rect>
-           <x>60</x>
-           <y>25</y>
-           <width>91</width>
-           <height>106</height>
-          </rect>
-         </property>
-        </widget>
         <widget class="QRadioButton" name="radioButton_9">
          <property name="geometry">
           <rect>
@@ -473,7 +445,7 @@
           <string>Color:</string>
          </property>
         </widget>
-        <widget class="QSlider" name="horizontalSlider_3">
+        <widget class="QSlider" name="pawnsColorSlider">
          <property name="geometry">
           <rect>
            <x>10</x>
@@ -486,7 +458,7 @@
           <enum>Qt::Horizontal</enum>
          </property>
         </widget>
-        <widget class="QSlider" name="horizontalSlider_4">
+        <widget class="QSlider" name="pawnsSizeSlider">
          <property name="geometry">
           <rect>
            <x>10</x>
@@ -512,12 +484,92 @@
           <string>Size:</string>
          </property>
         </widget>
+        <widget class="QLabel" name="pawnsPicture">
+         <property name="geometry">
+          <rect>
+           <x>85</x>
+           <y>25</y>
+           <width>66</width>
+           <height>106</height>
+          </rect>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::StyledPanel</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Plain</enum>
+         </property>
+         <property name="lineWidth">
+          <number>1</number>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="pixmap">
+          <pixmap resource="images.qrc">:/resources/resources/knight_example_2.png</pixmap>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
        </widget>
       </widget>
      </widget>
     </widget>
+    <widget class="QPushButton" name="newGameButton">
+     <property name="geometry">
+      <rect>
+       <x>21</x>
+       <y>13</y>
+       <width>59</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>New</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="closeGameButton">
+     <property name="geometry">
+      <rect>
+       <x>21</x>
+       <y>44</y>
+       <width>59</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Close</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="exitGameButton">
+     <property name="geometry">
+      <rect>
+       <x>86</x>
+       <y>44</y>
+       <width>59</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Exit</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="saveGameButton">
+     <property name="geometry">
+      <rect>
+       <x>86</x>
+       <y>13</y>
+       <width>59</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Save</string>
+     </property>
+    </widget>
    </widget>
-   <widget class="QWidget" name="tab_2">
+   <widget class="QWidget" name="statsTab">
     <property name="enabled">
      <bool>true</bool>
     </property>
@@ -530,7 +582,7 @@
      <string/>
     </attribute>
    </widget>
-   <widget class="QWidget" name="tab_3">
+   <widget class="QWidget" name="pcTab">
     <property name="enabled">
      <bool>true</bool>
     </property>
@@ -544,23 +596,10 @@
     </attribute>
    </widget>
   </widget>
-  <widget class="QLabel" name="label">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>1006</width>
-     <height>600</height>
-    </rect>
+  <widget class="QLabel" name="xtPictureLabel">
+   <property name="enabled">
+    <bool>true</bool>
    </property>
-   <property name="text">
-    <string/>
-   </property>
-   <property name="pixmap">
-    <pixmap resource="images.qrc">:/resources/resources/background.png</pixmap>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label_9">
    <property name="geometry">
     <rect>
      <x>975</x>
@@ -576,7 +615,10 @@
     <pixmap resource="images.qrc">:/resources/resources/xt.png</pixmap>
    </property>
   </widget>
-  <widget class="QFrame" name="frame">
+  <widget class="QFrame" name="scoreBoardFrame">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
    <property name="geometry">
     <rect>
      <x>815</x>
@@ -591,7 +633,7 @@
    <property name="frameShadow">
     <enum>QFrame::Raised</enum>
    </property>
-   <widget class="QLabel" name="label_7">
+   <widget class="QLabel" name="scoreBoardPiecesP1">
     <property name="geometry">
      <rect>
       <x>20</x>
@@ -607,7 +649,7 @@
      <set>Qt::AlignCenter</set>
     </property>
    </widget>
-   <widget class="QLabel" name="label_3">
+   <widget class="QLabel" name="scoreBoardTypeP1">
     <property name="geometry">
      <rect>
       <x>20</x>
@@ -623,7 +665,7 @@
      <set>Qt::AlignCenter</set>
     </property>
    </widget>
-   <widget class="QLabel" name="label_4">
+   <widget class="QLabel" name="scoreBoardTypeP2">
     <property name="geometry">
      <rect>
       <x>120</x>
@@ -639,7 +681,7 @@
      <set>Qt::AlignCenter</set>
     </property>
    </widget>
-   <widget class="QLabel" name="label_8">
+   <widget class="QLabel" name="scoreBoardPiecesP2">
     <property name="geometry">
      <rect>
       <x>120</x>
@@ -655,7 +697,7 @@
      <set>Qt::AlignCenter</set>
     </property>
    </widget>
-   <widget class="QLabel" name="label_2">
+   <widget class="QLabel" name="scoreBoardPicture">
     <property name="enabled">
      <bool>true</bool>
     </property>
@@ -674,7 +716,7 @@
      <pixmap resource="images.qrc">:/resources/resources/score_board.png</pixmap>
     </property>
    </widget>
-   <widget class="QLabel" name="label_6">
+   <widget class="QLabel" name="scoreBoardWinsP2">
     <property name="geometry">
      <rect>
       <x>120</x>
@@ -690,7 +732,7 @@
      <set>Qt::AlignCenter</set>
     </property>
    </widget>
-   <widget class="QLabel" name="label_5">
+   <widget class="QLabel" name="scoreBoardWinsP1">
     <property name="geometry">
      <rect>
       <x>20</x>
@@ -706,7 +748,7 @@
      <set>Qt::AlignCenter</set>
     </property>
    </widget>
-   <widget class="QLabel" name="label_10">
+   <widget class="QLabel" name="scoreBoardPictureP1">
     <property name="geometry">
      <rect>
       <x>20</x>
@@ -722,7 +764,7 @@
      <pixmap resource="images.qrc">:/resources/resources/knight_example.png</pixmap>
     </property>
    </widget>
-   <widget class="QLabel" name="label_15">
+   <widget class="QLabel" name="scoreBoardPictureP2">
     <property name="geometry">
      <rect>
       <x>120</x>
@@ -738,7 +780,7 @@
      <pixmap resource="images.qrc">:/resources/resources/knight_example_2.png</pixmap>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_6">
+   <widget class="QPushButton" name="playAgainButton">
     <property name="geometry">
      <rect>
       <x>55</x>
@@ -751,7 +793,10 @@
      <string>Play again</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label_16">
+   <widget class="QLabel" name="scoreBoardResultP1">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>20</x>
@@ -767,7 +812,7 @@
      <set>Qt::AlignCenter</set>
     </property>
    </widget>
-   <widget class="QLabel" name="label_17">
+   <widget class="QLabel" name="scoreBoardResultP2">
     <property name="geometry">
      <rect>
       <x>120</x>
@@ -783,24 +828,40 @@
      <set>Qt::AlignCenter</set>
     </property>
    </widget>
-   <zorder>label_2</zorder>
-   <zorder>label_7</zorder>
-   <zorder>label_3</zorder>
-   <zorder>label_4</zorder>
-   <zorder>label_8</zorder>
-   <zorder>label_6</zorder>
-   <zorder>label_5</zorder>
-   <zorder>label_10</zorder>
-   <zorder>label_15</zorder>
-   <zorder>pushButton_6</zorder>
-   <zorder>label_16</zorder>
-   <zorder>label_17</zorder>
+   <zorder>scoreBoardPicture</zorder>
+   <zorder>scoreBoardPiecesP1</zorder>
+   <zorder>scoreBoardTypeP1</zorder>
+   <zorder>scoreBoardTypeP2</zorder>
+   <zorder>scoreBoardPiecesP2</zorder>
+   <zorder>scoreBoardWinsP2</zorder>
+   <zorder>scoreBoardWinsP1</zorder>
+   <zorder>scoreBoardPictureP1</zorder>
+   <zorder>scoreBoardPictureP2</zorder>
+   <zorder>playAgainButton</zorder>
+   <zorder>scoreBoardResultP1</zorder>
+   <zorder>scoreBoardResultP2</zorder>
   </widget>
-  <zorder>label</zorder>
-  <zorder>label_9</zorder>
-  <zorder>frame</zorder>
+  <widget class="QLabel" name="boardPicture">
+   <property name="geometry">
+    <rect>
+     <x>230</x>
+     <y>10</y>
+     <width>580</width>
+     <height>580</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="pixmap">
+    <pixmap resource="images.qrc">:/resources/resources/board.png</pixmap>
+   </property>
+  </widget>
   <zorder>tabWidget</zorder>
-  <zorder>graphicsView</zorder>
+  <zorder>xtPictureLabel</zorder>
+  <zorder>scoreBoardFrame</zorder>
+  <zorder>boardPicture</zorder>
+  <zorder>boardGraphicsView</zorder>
  </widget>
  <resources>
   <include location="images.qrc"/>
