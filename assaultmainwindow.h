@@ -3,6 +3,7 @@
 
 #include <QtGui/QWidget>
 #include <QtGui/QPaintEvent>
+#include "assaultscene.h"
 
 namespace Ui
 {
@@ -17,7 +18,9 @@ public:
     AssaultMainWindow(QWidget *parent = 0);
     ~AssaultMainWindow();
     
-private:    
+private:
+    void setupUi();
+    
     Ui::AssaultMainWindow *ui;
 };
 
