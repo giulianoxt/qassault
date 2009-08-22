@@ -2,11 +2,14 @@
 #define PIECE_H
 
 #include <QGraphicsPixmapItem>
+#include "globals.h"
 
-class Piece : public QGraphicsPixmapItem
+class PieceItem : public QGraphicsPixmapItem
 {
 public:
-    Piece();
+    PieceItem(const QPixmap&);
+
+    void setPixmap(const QPixmap&);
 };
 
 #endif // PIECE_H

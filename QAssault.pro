@@ -7,12 +7,16 @@ SOURCES += main.cpp \
     assaultmainwindow.cpp \
     assaultscene.cpp \
     piece.cpp \
-    globals.cpp
+    globals.cpp \
+    assaultitems.cpp \
+    util.cpp
 HEADERS += assaultmainwindow.h \
     assaultscene.h \
     globals.h \
-    piece.h
+    piece.h \
+    assaultitems.h \
+    util.h
 FORMS += assaultmainwindow.ui
 CONFIG += console
 RESOURCES += images.qrc
-OTHER_FILES += 
+QMAKE_RESOURCE_FLAGS += -no-compress

@@ -169,7 +169,7 @@
          <enum>QTabWidget::Rounded</enum>
         </property>
         <property name="currentIndex">
-         <number>0</number>
+         <number>1</number>
         </property>
         <property name="documentMode">
          <bool>true</bool>
@@ -267,6 +267,12 @@
              <height>21</height>
             </rect>
            </property>
+           <property name="minimum">
+            <number>-180</number>
+           </property>
+           <property name="maximum">
+            <number>180</number>
+           </property>
            <property name="orientation">
             <enum>Qt::Horizontal</enum>
            </property>
@@ -280,8 +286,23 @@
              <height>21</height>
             </rect>
            </property>
+           <property name="minimum">
+            <number>7000</number>
+           </property>
+           <property name="maximum">
+            <number>10000</number>
+           </property>
+           <property name="value">
+            <number>7400</number>
+           </property>
            <property name="orientation">
             <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="invertedAppearance">
+            <bool>false</bool>
+           </property>
+           <property name="tickPosition">
+            <enum>QSlider::NoTicks</enum>
            </property>
           </widget>
           <widget class="QLabel" name="label_12">
@@ -319,7 +340,7 @@
             <string/>
            </property>
            <property name="pixmap">
-            <pixmap resource="images.qrc">:/resources/resources/knight_example_2.png</pixmap>
+            <pixmap resource="images.qrc">:/resources/resources/knight_example.png</pixmap>
            </property>
            <property name="alignment">
             <set>Qt::AlignCenter</set>
@@ -504,18 +525,11 @@
              <height>21</height>
             </rect>
            </property>
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
+           <property name="minimum">
+            <number>-180</number>
            </property>
-          </widget>
-          <widget class="QSlider" name="pawnsSizeSlider">
-           <property name="geometry">
-            <rect>
-             <x>10</x>
-             <y>220</y>
-             <width>136</width>
-             <height>21</height>
-            </rect>
+           <property name="maximum">
+            <number>180</number>
            </property>
            <property name="orientation">
             <enum>Qt::Horizontal</enum>
@@ -560,6 +574,34 @@
            </property>
            <property name="alignment">
             <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+          <widget class="QSlider" name="pawnsSizeSlider">
+           <property name="geometry">
+            <rect>
+             <x>10</x>
+             <y>220</y>
+             <width>136</width>
+             <height>21</height>
+            </rect>
+           </property>
+           <property name="minimum">
+            <number>7000</number>
+           </property>
+           <property name="maximum">
+            <number>10000</number>
+           </property>
+           <property name="value">
+            <number>7400</number>
+           </property>
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="invertedAppearance">
+            <bool>false</bool>
+           </property>
+           <property name="tickPosition">
+            <enum>QSlider::NoTicks</enum>
            </property>
           </widget>
          </widget>

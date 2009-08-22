@@ -3,37 +3,44 @@
 
 AssaultScene::AssaultScene()
 {
+    characterChanged(NULL, NULL);
 }
 
 
 void AssaultScene::startGame(const player_t& knights, const player_t& pawns)
 {    
     clear();    
-    layoutSquareItems();
+    layoutItems(); 
 }
 
-void AssaultScene::layoutSquareItems()
+void AssaultScene::characterChanged(const QPixmap *knight, const QPixmap *pawn)
+{
+    knightPixmap = knight;
+    pawnPixmap = pawn;
+}
+
+void AssaultScene::layoutItems()
 {
     int squareStep = boardSquareSize + boardSquareDistance;
     int offset = -3 * squareStep;
     
     for (int i = 0; i < boardSize; ++i) {
         int pos_i = i * squareStep + offset;
-        
-        for (int j = 0; j < boardSize; ++j) {
+    
+        for (int j = 0; j < boardSize; ++j) {           
             int pos_j = j * squareStep + offset;
         
             if (!isValidSquare(i, j)) continue;
             
-            QGraphicsRectItem *item = new QGraphicsRectItem(0, 0, 
-                                           boardSquareSize, boardSquareSize);
-            
-            item->setBrush(debugColor);
-            item->setPos(pos_j, pos_i);
-            item->setVisible(false);
-            item->setZValue(-1.0);
-            
+            SquareItem *item = new SquareItem(i, j);
+            item->setPos(pos_j, pos_i);            
             addItem(squares[i][j] = item);
+            
+            if (!isInsideFortress(i, j)) {
+                PieceItem* item = new PieceItem(*pawnPixmap);
+                item->setPos(pos_j, pos_i);
+                addItem(pieces[i][j] = item);
+            }
         }
     }
 }

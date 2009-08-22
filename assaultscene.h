@@ -4,6 +4,9 @@
 #include <QGraphicsScene>
 #include <QGraphicsItem>
 #include "globals.h"
+#include "piece.h"
+#include "assaultitems.h"
+
 
 class AssaultScene : public QGraphicsScene
 {
@@ -12,12 +15,14 @@ public:
 
 public slots:
     void startGame(const player_t&, const player_t&);
+    void characterChanged(const QPixmap*, const QPixmap*);
 
 private:
-    void layoutSquareItems();
+    void layoutItems();
     
-    QGraphicsItem* squares[boardSize][boardSize];
-    
+    const QPixmap *knightPixmap, *pawnPixmap;
+    SquareItem* squares[boardSize][boardSize];
+    PieceItem* pieces[boardSize][boardSize];
 };
 
 #endif // ASSAULTSCENE_H

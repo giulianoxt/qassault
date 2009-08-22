@@ -20,6 +20,8 @@ public:
 
 private slots:
     void startGame();
+    void updateKnightPic();
+    void updatePawnPic();
     
 private:
     void setupUi();
@@ -27,6 +29,8 @@ private:
     
     Ui::AssaultMainWindow *ui;
     AssaultScene *scene;
+    
+    QPixmap origKnightPic, origPawnPic;
 };
 
 #endif // ASSAULTMAINWINDOW_H
