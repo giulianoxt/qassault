@@ -17,11 +17,16 @@ class AssaultMainWindow : public QWidget
 public:
     AssaultMainWindow(QWidget *parent = 0);
     ~AssaultMainWindow();
+
+private slots:
+    void startGame();
     
 private:
     void setupUi();
+    void setupConnections();
     
     Ui::AssaultMainWindow *ui;
+    AssaultScene *scene;
 };
 
 #endif // ASSAULTMAINWINDOW_H

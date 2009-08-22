@@ -5,9 +5,13 @@ TARGET = QAssault
 TEMPLATE = app
 SOURCES += main.cpp \
     assaultmainwindow.cpp \
-    assaultscene.cpp
+    assaultscene.cpp \
+    piece.cpp \
+    globals.cpp
 HEADERS += assaultmainwindow.h \
-    assaultscene.h
+    assaultscene.h \
+    globals.h \
+    piece.h
 FORMS += assaultmainwindow.ui
 CONFIG += console
 RESOURCES += images.qrc
