@@ -287,10 +287,10 @@
             </rect>
            </property>
            <property name="minimum">
-            <number>7000</number>
+            <number>6500</number>
            </property>
            <property name="maximum">
-            <number>10000</number>
+            <number>7400</number>
            </property>
            <property name="value">
             <number>7400</number>
@@ -586,10 +586,10 @@
             </rect>
            </property>
            <property name="minimum">
-            <number>7000</number>
+            <number>6500</number>
            </property>
            <property name="maximum">
-            <number>10000</number>
+            <number>7400</number>
            </property>
            <property name="value">
             <number>7400</number>

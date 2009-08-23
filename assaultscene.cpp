@@ -20,25 +20,19 @@ void AssaultScene::characterChanged(const QPixmap *knight, const QPixmap *pawn)
 }
 
 void AssaultScene::layoutItems()
-{
-    int squareStep = boardSquareSize + boardSquareDistance;
-    int offset = -3 * squareStep;
-    
-    for (int i = 0; i < boardSize; ++i) {
-        int pos_i = i * squareStep + offset;
-    
-        for (int j = 0; j < boardSize; ++j) {           
-            int pos_j = j * squareStep + offset;
-        
+{    
+    for (int i = 0; i < boardSize; ++i) {    
+        for (int j = 0; j < boardSize; ++j) {
             if (!isValidSquare(i, j)) continue;
             
             SquareItem *item = new SquareItem(i, j);
-            item->setPos(pos_j, pos_i);            
+            
+            item->setPos(boardToScene(i, j) + QPoint(0, 6));
             addItem(squares[i][j] = item);
             
             if (!isInsideFortress(i, j)) {
-                PieceItem* item = new PieceItem(*pawnPixmap);
-                item->setPos(pos_j, pos_i);
+                PieceItem* item = new PieceItem(*pawnPixmap, i, j);
+                item->setPos(boardToScene(i, j));
                 addItem(pieces[i][j] = item);
             }
         }

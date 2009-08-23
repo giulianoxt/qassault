@@ -1,9 +1,10 @@
 #include "util.h"
+#include "globals.h"
 
 
 double sliderRealValue(const QSlider& slider)
 {
-    return slider.value() / double(slider.maximum());
+    return slider.value() / 10000.;
 }
 
 void changeHue(QPixmap& px, int h_delta)
@@ -24,4 +25,12 @@ void changeHue(QPixmap& px, int h_delta)
     
     px = QPixmap::fromImage(img);
     px.setAlphaChannel(alpha);
+}
+
+QPoint boardToScene(int i, int j)
+{
+    int squareStep = boardSquareSize + boardSquareDistance;
+    int offset = -3 * squareStep;
+    
+    return QPoint(i * squareStep + offset, j * squareStep + offset);
 }

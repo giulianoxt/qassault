@@ -1,5 +1,6 @@
 #include "assaultmainwindow.h"
 #include "ui_assaultmainwindow.h"
+#include "assaultitems.h"
 #include "util.h"
 
 
@@ -26,6 +27,8 @@ void AssaultMainWindow::setupUi()
     origKnightPic.load(":/resources/resources/knight_example.png");
     origPawnPic.load(":/resources/resources/knight_example_2.png");
 
+    SquareItem::setSpotPic(QPixmap(":/resources/resources/spot.png"));
+    
     updateKnightPic();
     updatePawnPic();
 }
@@ -54,7 +57,7 @@ void AssaultMainWindow::startGame()
 void AssaultMainWindow::updateKnightPic()
 {
     int newHeight = int(characterHeight * sliderRealValue(*ui->knightsSizeSlider));    
-    QPixmap newPic = origKnightPic.scaledToHeight(newHeight);
+    QPixmap newPic = origKnightPic.scaledToHeight(newHeight, Qt::SmoothTransformation);
     
     changeHue(newPic, ui->knightsColorSlider->value());
     

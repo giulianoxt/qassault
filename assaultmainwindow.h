@@ -17,7 +17,7 @@ class AssaultMainWindow : public QWidget
 public:
     AssaultMainWindow(QWidget *parent = 0);
     ~AssaultMainWindow();
-
+    
 private slots:
     void startGame();
     void updateKnightPic();
