@@ -1,3 +1,4 @@
+#include "game.h"
 #include "globals.h"
 
 
@@ -12,4 +13,10 @@ bool isValidSquare(int i, int j)
 bool isInsideFortress(int i, int j)
 {
     return (i >= 2 && i <= 4 && j >= 2 && j <= 4);
+}
+
+
+GameState::GameState()
+{
+
 }

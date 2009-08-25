@@ -45,18 +45,13 @@ void AssaultMainWindow::setupConnections()
 }
 
 void AssaultMainWindow::startGame()
-{
-    player_t defense, attack;
-    
-    defense = ui->defenseHumanRadioButton->isChecked() ? Human : PC;
-    attack = ui->attackHumanRadioButton->isChecked() ? Human : PC;
-    
+{    
     scene = new AssaultScene;
     
     ui->boardGraphicsView->setScene(scene);
     scene->characterChanged(ui->defensePicture->pixmap(), ui->attackPicture->pixmap());
     
-    scene->startGame(defense, attack);
+    scene->startGame();
     
 }
 

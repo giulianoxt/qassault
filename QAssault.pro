@@ -1,24 +1,31 @@
 # -------------------------------------------------
 # Project created by QtCreator 2009-08-18T22:06:27
 # -------------------------------------------------
+include(C:\GiulianoXT\bin\qtstatemachine-1.1-opensource\src\statemachine.pri)
 TARGET = QAssault
 TEMPLATE = app
 SOURCES += main.cpp \
     assaultmainwindow.cpp \
     assaultscene.cpp \
     piece.cpp \
-    globals.cpp \
     assaultitems.cpp \
     util.cpp \
-    player.cpp
+    player.cpp \
+    game.cpp \
+    transitions.cpp
 HEADERS += assaultmainwindow.h \
     assaultscene.h \
     globals.h \
     piece.h \
     assaultitems.h \
     util.h \
-    player.h
+    player.h \
+    game.h \
+    transitions.h
 FORMS += assaultmainwindow.ui
 CONFIG += console
 RESOURCES += images.qrc
 QMAKE_RESOURCE_FLAGS += -no-compress
+DEFINES += QT_STATEMACHINE_SOLUTION \
+    QT_NO_ANIMATION
+INCLUDEPATH += C:/GiulianoXT/bin/qtstatemachine-1.1-opensource/src

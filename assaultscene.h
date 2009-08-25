@@ -4,6 +4,7 @@
 #include <QGraphicsScene>
 #include <QGraphicsItem>
 #include "globals.h"
+#include "game.h"
 #include "util.h"
 #include "piece.h"
 #include "assaultitems.h"
@@ -21,7 +22,7 @@ signals:
     void squareClicked(int, int);        
     
 public slots:
-    void startGame(const player_t&, const player_t&);
+    void startGame();
     void characterChanged(const QPixmap*, const QPixmap*);
     
 private:

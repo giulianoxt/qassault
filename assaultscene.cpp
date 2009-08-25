@@ -7,7 +7,7 @@ AssaultScene::AssaultScene()
 }
 
 
-void AssaultScene::startGame(const player_t& defense, const player_t& attack)
+void AssaultScene::startGame()
 {    
     clear();    
     layoutItems(); 

@@ -38,3 +38,5 @@ QPoint boardToScene(int i, int j)
     
     return QPoint(i * squareStep + offset, j * squareStep + offset);
 }
+
+

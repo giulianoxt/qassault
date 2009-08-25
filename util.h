@@ -6,6 +6,9 @@
 #include <QString>
 #include <QColor>
 #include <QPoint>
+#include <QEvent>
+#include <QtSignalTransition>
+
 #include <iostream>
 #include <algorithm>
 using namespace std;
@@ -21,6 +24,6 @@ QPoint boardToScene(int, int);
 template<typename T>
 void debug(const QString& msg, const T& s) {
     cout << "[" << msg.toStdString() << "] " << s << endl;
-}
+}       
 
 #endif // UTIL_H
