@@ -1,21 +1,28 @@
 #include "player.h"
 
 
-Player::Player(const PlayerType& t, GameState* state)
-        : type(t), gameState(state), machine(new QtStateMachine(this))
+Player::Player(const PlayerType& t, GameState* state, QObject* obj)
+        : type(t), statusObj(obj), gameState(state),
+          machine(new QtStateMachine(this))
 {
     
 }
 
 
-HumanPlayer::HumanPlayer(const PlayerType& t, GameState* state)
-        : Player(t, state)
+HumanPlayer::HumanPlayer(const PlayerType& t, GameState* state, QObject* obj)
+        : Player(t, state, obj)
 {
     QtState* wait(new QtState);
+    wait->assignProperty(statusObj, "text", "Waiting");
     QtState* end(new QtState);
+    end->assignProperty(statusObj, "text", "");
+    
     QtState* play(new QtState);
+    
     QtState* selectPiece(new QtState(play));
+    selectPiece->assignProperty(statusObj, "text", "Select piece");    
     QtState* selectDest(new QtState(play));
+    selectDest->assignProperty(statusObj, "text", "Play");
     
     wait->addTransition(this, SIGNAL(opponentPlayed()), play);
     wait->addTransition(this, SIGNAL(gameEnded()), end);
@@ -44,7 +51,9 @@ HumanPlayer::HumanPlayer(const PlayerType& t, GameState* state)
     
     if (t == Defense) {
         QtState* chooseStartPos1(new QtState);
+        chooseStartPos1->assignProperty(statusObj, "text", "Start pos (1/2)");
         QtState* chooseStartPos2(new QtState);
+        chooseStartPos2->assignProperty(statusObj, "text", "Start pos (2/2)");
         
         OpenSquareClicked* t1(new OpenSquareClicked(this));
         t1->setTargetState(chooseStartPos2);
@@ -62,4 +71,6 @@ HumanPlayer::HumanPlayer(const PlayerType& t, GameState* state)
     else {
         machine->setInitialState(wait);
     }
+    
+    machine->start();
 }

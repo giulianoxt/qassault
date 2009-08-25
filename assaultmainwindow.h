@@ -4,6 +4,7 @@
 #include <QtGui/QWidget>
 #include <QtGui/QPaintEvent>
 #include "assaultscene.h"
+#include "player.h"
 
 namespace Ui
 {
@@ -26,11 +27,14 @@ private slots:
 private:
     void setupUi();
     void setupConnections();
+    void setupSceneToPlayer(AssaultScene*, Player*);
     
     Ui::AssaultMainWindow *ui;
-    AssaultScene *scene;
-    
     QPixmap origAttackPic, origDefensePic;
+    
+private:
+    AssaultScene *scene;
+    Player *attack, *defense;
 };
 
 #endif // ASSAULTMAINWINDOW_H

@@ -33,7 +33,7 @@ OpenSquareClicked::OpenSquareClicked(Player* p)
 
 bool OpenSquareClicked::trigger(int i, int j) const
 {
-    return false;
+    return true;
 }
 
 
@@ -43,7 +43,7 @@ PieceClicked::PieceClicked(Player* p)
 
 bool PieceClicked::trigger(int i, int j) const
 {
-    return false;
+    return true;
 }
 
 
@@ -53,5 +53,5 @@ DestSquareClicked::DestSquareClicked(Player* p)
 
 bool DestSquareClicked::trigger(int i, int j) const
 {
-    return false;
+    return true;
 }

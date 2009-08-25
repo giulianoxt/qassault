@@ -5,8 +5,9 @@
 
 
 AssaultMainWindow::AssaultMainWindow(QWidget *parent)
-    : QWidget(parent), ui(new Ui::AssaultMainWindow)
-{
+    : QWidget(parent), ui(new Ui::AssaultMainWindow),
+      scene(NULL), attack(NULL), defense(NULL)
+{    
     setupUi();
     setupConnections();
 }
@@ -44,15 +45,36 @@ void AssaultMainWindow::setupConnections()
     connect(ui->attackSizeSlider, SIGNAL(valueChanged(int)), SLOT(updateAttackPic()));
 }
 
+void AssaultMainWindow::setupSceneToPlayer(AssaultScene* scene, Player* p)
+{
+    connect(scene, SIGNAL(pieceClicked(int,int)), p, SIGNAL(pieceClicked(int,int)));
+    connect(scene, SIGNAL(squareClicked(int,int)), p, SIGNAL(squareClicked(int,int)));
+}
+
 void AssaultMainWindow::startGame()
 {    
+    if (scene) {
+        delete scene;
+    }
+    
+    if (attack && defense) {
+        delete attack;
+        delete defense;
+    }
+    
     scene = new AssaultScene;
+    attack = new HumanPlayer(Attack, NULL, ui->scoreBoardStatusP1);
+    defense = new HumanPlayer(Defense, NULL, ui->scoreBoardStatusP2);
+    
+    setupSceneToPlayer(scene, attack);
+    setupSceneToPlayer(scene, defense);    
+    
+    ui->scoreBoardPictureP1->setPixmap(*ui->attackPicture->pixmap());
+    ui->scoreBoardPictureP2->setPixmap(*ui->defensePicture->pixmap());
     
     ui->boardGraphicsView->setScene(scene);
     scene->characterChanged(ui->defensePicture->pixmap(), ui->attackPicture->pixmap());
-    
     scene->startGame();
-    
 }
 
 void AssaultMainWindow::updateDefensePic()

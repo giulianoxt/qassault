@@ -1,5 +1,7 @@
 #include "piece.h"
 #include "globals.h"
+#include<iostream>
+using namespace std;
 
 PieceItem::PieceItem(const QPixmap& pic, int _i, int _j) : i(_i), j(_j)
 {

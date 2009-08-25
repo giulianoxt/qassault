@@ -17,7 +17,7 @@ class Player : public QObject
     Q_OBJECT
     
 public:
-    Player(const PlayerType&, GameState*);
+    Player(const PlayerType&, GameState*, QObject*);
 
 signals:
     void gameEnded();
@@ -27,6 +27,7 @@ signals:
     
 protected:
     PlayerType type;
+    QObject* statusObj;
     GameState* gameState;
     QtStateMachine* machine;
 };
@@ -36,7 +37,7 @@ class HumanPlayer : public Player
 {
 
 public:
-    HumanPlayer(const PlayerType&, GameState*);
+    HumanPlayer(const PlayerType&, GameState*, QObject*);
 };
 
 #endif // PLAYER_H
