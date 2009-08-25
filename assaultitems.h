@@ -6,16 +6,22 @@
 #include "globals.h"
 
 
-class SquareItem : public QGraphicsRectItem
+class SquareItem : public QObject, public QGraphicsRectItem
 {
+    Q_OBJECT
+    
 public:
     SquareItem(int, int);
     
     static void setSpotPic(const QPixmap&);
     
+signals:
+    void clicked(int, int);
+    
 private:
     void hoverEnterEvent(QGraphicsSceneHoverEvent*);
     void hoverLeaveEvent(QGraphicsSceneHoverEvent*);
+    void mousePressEvent(QGraphicsSceneMouseEvent*);
     
     static QBrush spotPic;
     

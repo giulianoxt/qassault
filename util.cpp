@@ -2,12 +2,16 @@
 #include "globals.h"
 
 
+int bounded(int x, int a, int b) {
+    return max(a, min(x, b));
+}
+
 double sliderRealValue(const QSlider& slider)
 {
     return slider.value() / 10000.;
 }
 
-void changeHue(QPixmap& px, int h_delta)
+void changeColors(QPixmap& px, int h_delta, int s_delta)
 {    
     QPixmap alpha = px.alphaChannel();
     QImage img = px.toImage();
@@ -18,7 +22,7 @@ void changeHue(QPixmap& px, int h_delta)
         
         int h, s, v;
         c.getHsv(&h, &s, &v);
-        c.setHsv((h + h_delta + 2*360) % 360, s, v);
+        c.setHsv((h + h_delta + 2*360) % 360, bounded(s + s_delta, 0, 255), v);
         
         img.setPixel(x, y, c.rgb());
     }

@@ -15,6 +15,10 @@ class AssaultScene : public QGraphicsScene
     
 public:
     AssaultScene();
+
+signals:
+    void pieceClicked(int, int);    
+    void squareClicked(int, int);        
     
 public slots:
     void startGame(const player_t&, const player_t&);
@@ -23,7 +27,7 @@ public slots:
 private:
     void layoutItems();    
     
-    const QPixmap *knightPixmap, *pawnPixmap;
+    const QPixmap *defensePixmap, *attackPixmap;
     SquareItem* squares[boardSize][boardSize];
     PieceItem* pieces[boardSize][boardSize];
 };

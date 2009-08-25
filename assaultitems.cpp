@@ -35,3 +35,8 @@ void SquareItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *e)
     setBrush(Qt::transparent);
     update();
 }
+
+void SquareItem::mousePressEvent(QGraphicsSceneMouseEvent*)
+{
+    emit clicked(i, j);
+}

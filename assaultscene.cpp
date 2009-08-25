@@ -7,16 +7,16 @@ AssaultScene::AssaultScene()
 }
 
 
-void AssaultScene::startGame(const player_t& knights, const player_t& pawns)
+void AssaultScene::startGame(const player_t& defense, const player_t& attack)
 {    
     clear();    
     layoutItems(); 
 }
 
-void AssaultScene::characterChanged(const QPixmap *knight, const QPixmap *pawn)
+void AssaultScene::characterChanged(const QPixmap *defense, const QPixmap *attack)
 {
-    knightPixmap = knight;
-    pawnPixmap = pawn;
+    defensePixmap = defense;
+    attackPixmap = attack;
 }
 
 void AssaultScene::layoutItems()
@@ -27,11 +27,16 @@ void AssaultScene::layoutItems()
             
             SquareItem *item = new SquareItem(i, j);
             
+            connect(item, SIGNAL(clicked(int,int)), SIGNAL(squareClicked(int,int)));
+            
             item->setPos(boardToScene(i, j) + QPoint(0, 6));
             addItem(squares[i][j] = item);
             
             if (!isInsideFortress(i, j)) {
-                PieceItem* item = new PieceItem(*pawnPixmap, i, j);
+                PieceItem* item = new PieceItem(*attackPixmap, i, j);
+                
+                connect(item, SIGNAL(clicked(int,int)), SIGNAL(pieceClicked(int,int)));
+                
                 item->setPos(boardToScene(i, j));
                 addItem(pieces[i][j] = item);
             }

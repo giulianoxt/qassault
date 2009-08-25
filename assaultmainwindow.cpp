@@ -18,58 +18,64 @@ AssaultMainWindow::~AssaultMainWindow()
 
 
 void AssaultMainWindow::setupUi()
-{    
-    ui->setupUi(this);    
-    
+{
+    ui->setupUi(this);        
     ui->boardGraphicsView->setStyleSheet("background: transparent");
-    ui->boardGraphicsView->setScene(scene = new AssaultScene);
     
-    origKnightPic.load(":/resources/resources/knight_example.png");
-    origPawnPic.load(":/resources/resources/knight_example_2.png");
+    origDefensePic.load(":/resources/resources/mage.png");
+    origAttackPic.load(":/resources/resources/knight_example_2.png");
 
     SquareItem::setSpotPic(QPixmap(":/resources/resources/spot.png"));
     
-    updateKnightPic();
-    updatePawnPic();
+    updateDefensePic();
+    updateAttackPic();
 }
 
 void AssaultMainWindow::setupConnections()
 {
     connect(ui->startGameButton, SIGNAL(clicked()), SLOT(startGame()));
     
-    connect(ui->knightsColorSlider, SIGNAL(valueChanged(int)), SLOT(updateKnightPic()));
-    connect(ui->knightsSizeSlider, SIGNAL(valueChanged(int)), SLOT(updateKnightPic()));
-    connect(ui->pawnsColorSlider, SIGNAL(valueChanged(int)), SLOT(updatePawnPic()));
-    connect(ui->pawnsSizeSlider, SIGNAL(valueChanged(int)), SLOT(updatePawnPic()));
+    connect(ui->defenseSaturationSlider, SIGNAL(valueChanged(int)), SLOT(updateDefensePic()));
+    connect(ui->defenseColorSlider, SIGNAL(valueChanged(int)), SLOT(updateDefensePic()));
+    connect(ui->defenseSizeSlider, SIGNAL(valueChanged(int)), SLOT(updateDefensePic()));
+    
+    connect(ui->attackSaturationSlider, SIGNAL(valueChanged(int)), SLOT(updateAttackPic()));
+    connect(ui->attackColorSlider, SIGNAL(valueChanged(int)), SLOT(updateAttackPic()));
+    connect(ui->attackSizeSlider, SIGNAL(valueChanged(int)), SLOT(updateAttackPic()));
 }
 
 void AssaultMainWindow::startGame()
 {
-    player_t knights, pawns;
+    player_t defense, attack;
     
-    knights = ui->knightsHumanRadioButton->isChecked() ? Human : PC;
-    pawns = ui->pawnsHumanRadioButton->isChecked() ? Human : PC;
+    defense = ui->defenseHumanRadioButton->isChecked() ? Human : PC;
+    attack = ui->attackHumanRadioButton->isChecked() ? Human : PC;
     
-    scene->characterChanged(ui->knightsPicture->pixmap(), ui->pawnsPicture->pixmap());
-    scene->startGame(knights, pawns);
+    scene = new AssaultScene;
+    
+    ui->boardGraphicsView->setScene(scene);
+    scene->characterChanged(ui->defensePicture->pixmap(), ui->attackPicture->pixmap());
+    
+    scene->startGame(defense, attack);
+    
 }
 
-void AssaultMainWindow::updateKnightPic()
+void AssaultMainWindow::updateDefensePic()
 {
-    int newHeight = int(characterHeight * sliderRealValue(*ui->knightsSizeSlider));    
-    QPixmap newPic = origKnightPic.scaledToHeight(newHeight, Qt::SmoothTransformation);
+    int newHeight = int(characterHeight * sliderRealValue(*ui->defenseSizeSlider));    
+    QPixmap newPic = origDefensePic.scaledToHeight(newHeight, Qt::SmoothTransformation);
     
-    changeHue(newPic, ui->knightsColorSlider->value());
+    changeColors(newPic, ui->defenseColorSlider->value(), ui->defenseSaturationSlider->value());
     
-    ui->knightsPicture->setPixmap(newPic);
+    ui->defensePicture->setPixmap(newPic);
 }
 
-void AssaultMainWindow::updatePawnPic()
+void AssaultMainWindow::updateAttackPic()
 {    
-    int newHeight = int(characterHeight * sliderRealValue(*ui->pawnsSizeSlider));
-    QPixmap newPic = origPawnPic.scaledToHeight(newHeight, Qt::SmoothTransformation);
+    int newHeight = int(characterHeight * sliderRealValue(*ui->attackSizeSlider));
+    QPixmap newPic = origAttackPic.scaledToHeight(newHeight, Qt::SmoothTransformation);
     
-    changeHue(newPic, ui->pawnsColorSlider->value());
+    changeColors(newPic, ui->attackColorSlider->value(), ui->attackSaturationSlider->value());
     
-    ui->pawnsPicture->setPixmap(newPic);
+    ui->attackPicture->setPixmap(newPic);
 }

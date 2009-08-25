@@ -9,13 +9,15 @@ SOURCES += main.cpp \
     piece.cpp \
     globals.cpp \
     assaultitems.cpp \
-    util.cpp
+    util.cpp \
+    player.cpp
 HEADERS += assaultmainwindow.h \
     assaultscene.h \
     globals.h \
     piece.h \
     assaultitems.h \
-    util.h
+    util.h \
+    player.h
 FORMS += assaultmainwindow.ui
 CONFIG += console
 RESOURCES += images.qrc

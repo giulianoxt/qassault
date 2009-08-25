@@ -13,7 +13,7 @@ using namespace std;
 
 double sliderRealValue(const QSlider&);
 
-void changeHue(QPixmap&, int);
+void changeColors(QPixmap&, int, int);
 
 QPoint boardToScene(int, int);
 

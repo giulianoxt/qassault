@@ -169,14 +169,14 @@
          <enum>QTabWidget::Rounded</enum>
         </property>
         <property name="currentIndex">
-         <number>1</number>
+         <number>0</number>
         </property>
         <property name="documentMode">
          <bool>true</bool>
         </property>
-        <widget class="QWidget" name="knightsTab">
+        <widget class="QWidget" name="defenseTab">
          <attribute name="title">
-          <string>Knights</string>
+          <string>Defense</string>
          </attribute>
          <widget class="QGroupBox" name="groupBox_2">
           <property name="geometry">
@@ -184,7 +184,7 @@
             <x>0</x>
             <y>5</y>
             <width>156</width>
-            <height>251</height>
+            <height>261</height>
            </rect>
           </property>
           <property name="title">
@@ -249,7 +249,7 @@
            <property name="geometry">
             <rect>
              <x>10</x>
-             <y>150</y>
+             <y>145</y>
              <width>46</width>
              <height>14</height>
             </rect>
@@ -258,11 +258,11 @@
             <string>Color:</string>
            </property>
           </widget>
-          <widget class="QSlider" name="knightsColorSlider">
+          <widget class="QSlider" name="defenseColorSlider">
            <property name="geometry">
             <rect>
              <x>10</x>
-             <y>170</y>
+             <y>155</y>
              <width>136</width>
              <height>21</height>
             </rect>
@@ -277,11 +277,11 @@
             <enum>Qt::Horizontal</enum>
            </property>
           </widget>
-          <widget class="QSlider" name="knightsSizeSlider">
+          <widget class="QSlider" name="defenseSizeSlider">
            <property name="geometry">
             <rect>
              <x>10</x>
-             <y>220</y>
+             <y>230</y>
              <width>136</width>
              <height>21</height>
             </rect>
@@ -309,7 +309,7 @@
            <property name="geometry">
             <rect>
              <x>10</x>
-             <y>200</y>
+             <y>220</y>
              <width>46</width>
              <height>14</height>
             </rect>
@@ -318,12 +318,12 @@
             <string>Size:</string>
            </property>
           </widget>
-          <widget class="QLabel" name="knightsPicture">
+          <widget class="QLabel" name="defensePicture">
            <property name="geometry">
             <rect>
-             <x>85</x>
+             <x>75</x>
              <y>25</y>
-             <width>66</width>
+             <width>76</width>
              <height>106</height>
             </rect>
            </property>
@@ -340,10 +340,42 @@
             <string/>
            </property>
            <property name="pixmap">
-            <pixmap resource="images.qrc">:/resources/resources/knight_example.png</pixmap>
+            <pixmap resource="images.qrc">:/resources/resources/mage.png</pixmap>
            </property>
            <property name="alignment">
             <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+          <widget class="QLabel" name="label_2">
+           <property name="geometry">
+            <rect>
+             <x>10</x>
+             <y>180</y>
+             <width>66</width>
+             <height>10</height>
+            </rect>
+           </property>
+           <property name="text">
+            <string>Saturation:</string>
+           </property>
+          </widget>
+          <widget class="QSlider" name="defenseSaturationSlider">
+           <property name="geometry">
+            <rect>
+             <x>10</x>
+             <y>195</y>
+             <width>136</width>
+             <height>21</height>
+            </rect>
+           </property>
+           <property name="minimum">
+            <number>-255</number>
+           </property>
+           <property name="maximum">
+            <number>255</number>
+           </property>
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
            </property>
           </widget>
          </widget>
@@ -351,7 +383,7 @@
           <property name="geometry">
            <rect>
             <x>0</x>
-            <y>265</y>
+            <y>270</y>
             <width>156</width>
             <height>51</height>
            </rect>
@@ -359,7 +391,7 @@
           <property name="title">
            <string>Control</string>
           </property>
-          <widget class="QRadioButton" name="knightsHumanRadioButton">
+          <widget class="QRadioButton" name="defenseHumanRadioButton">
            <property name="geometry">
             <rect>
              <x>5</x>
@@ -375,7 +407,7 @@
             <bool>true</bool>
            </property>
           </widget>
-          <widget class="QRadioButton" name="knightsComputerRadioButton">
+          <widget class="QRadioButton" name="defenseComputerRadioButton">
            <property name="geometry">
             <rect>
              <x>80</x>
@@ -390,15 +422,15 @@
           </widget>
          </widget>
         </widget>
-        <widget class="QWidget" name="pawnsTab">
+        <widget class="QWidget" name="attackTab">
          <attribute name="title">
-          <string>Pawns</string>
+          <string>Attack</string>
          </attribute>
          <widget class="QGroupBox" name="controlGroupBox_2">
           <property name="geometry">
            <rect>
             <x>0</x>
-            <y>265</y>
+            <y>270</y>
             <width>156</width>
             <height>51</height>
            </rect>
@@ -406,7 +438,7 @@
           <property name="title">
            <string>Control</string>
           </property>
-          <widget class="QRadioButton" name="pawnsHumanRadioButton">
+          <widget class="QRadioButton" name="attackHumanRadioButton">
            <property name="geometry">
             <rect>
              <x>5</x>
@@ -419,7 +451,7 @@
             <string>Human</string>
            </property>
           </widget>
-          <widget class="QRadioButton" name="pawnsComputerRadioButton">
+          <widget class="QRadioButton" name="attackComputerRadioButton">
            <property name="geometry">
             <rect>
              <x>80</x>
@@ -442,7 +474,7 @@
             <x>0</x>
             <y>5</y>
             <width>156</width>
-            <height>251</height>
+            <height>261</height>
            </rect>
           </property>
           <property name="title">
@@ -507,7 +539,7 @@
            <property name="geometry">
             <rect>
              <x>10</x>
-             <y>150</y>
+             <y>145</y>
              <width>46</width>
              <height>14</height>
             </rect>
@@ -516,11 +548,11 @@
             <string>Color:</string>
            </property>
           </widget>
-          <widget class="QSlider" name="pawnsColorSlider">
+          <widget class="QSlider" name="attackColorSlider">
            <property name="geometry">
             <rect>
              <x>10</x>
-             <y>170</y>
+             <y>155</y>
              <width>136</width>
              <height>21</height>
             </rect>
@@ -539,7 +571,7 @@
            <property name="geometry">
             <rect>
              <x>10</x>
-             <y>200</y>
+             <y>220</y>
              <width>46</width>
              <height>14</height>
             </rect>
@@ -548,12 +580,12 @@
             <string>Size:</string>
            </property>
           </widget>
-          <widget class="QLabel" name="pawnsPicture">
+          <widget class="QLabel" name="attackPicture">
            <property name="geometry">
             <rect>
-             <x>85</x>
+             <x>75</x>
              <y>25</y>
-             <width>66</width>
+             <width>76</width>
              <height>106</height>
             </rect>
            </property>
@@ -576,11 +608,11 @@
             <set>Qt::AlignCenter</set>
            </property>
           </widget>
-          <widget class="QSlider" name="pawnsSizeSlider">
+          <widget class="QSlider" name="attackSizeSlider">
            <property name="geometry">
             <rect>
              <x>10</x>
-             <y>220</y>
+             <y>230</y>
              <width>136</width>
              <height>21</height>
             </rect>
@@ -602,6 +634,38 @@
            </property>
            <property name="tickPosition">
             <enum>QSlider::NoTicks</enum>
+           </property>
+          </widget>
+          <widget class="QLabel" name="label_3">
+           <property name="geometry">
+            <rect>
+             <x>10</x>
+             <y>180</y>
+             <width>66</width>
+             <height>10</height>
+            </rect>
+           </property>
+           <property name="text">
+            <string>Saturation:</string>
+           </property>
+          </widget>
+          <widget class="QSlider" name="attackSaturationSlider">
+           <property name="geometry">
+            <rect>
+             <x>10</x>
+             <y>195</y>
+             <width>136</width>
+             <height>21</height>
+            </rect>
+           </property>
+           <property name="minimum">
+            <number>-255</number>
+           </property>
+           <property name="maximum">
+            <number>255</number>
+           </property>
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
            </property>
           </widget>
          </widget>
@@ -960,10 +1024,10 @@
    </property>
   </widget>
   <zorder>boardPicture</zorder>
+  <zorder>boardGraphicsView</zorder>
   <zorder>dockWidget</zorder>
   <zorder>dockWidget_2</zorder>
   <zorder>xtPictureLabel</zorder>
-  <zorder>boardGraphicsView</zorder>
  </widget>
  <resources>
   <include location="images.qrc"/>
