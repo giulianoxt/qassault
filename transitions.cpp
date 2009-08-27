@@ -1,5 +1,6 @@
 #include "transitions.h"
 #include <QList>
+#include <QPoint>
 #include <QVariant>
 #include <QtSignalEvent>
 
@@ -33,7 +34,13 @@ OpenSquareClicked::OpenSquareClicked(Player* p)
 
 bool OpenSquareClicked::trigger(int i, int j) const
 {
-    return true;
+    if (player->getGameState()->isOpen(i, j)) {
+        player->getStateData()->insert("selectedSquare", QPoint(i, j));
+        return true;
+    }
+    else {
+        return false;
+    }
 }
 
 

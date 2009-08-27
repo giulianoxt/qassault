@@ -1,4 +1,5 @@
 #include "player.h"
+#include <QPoint>
 
 
 Player::Player(const PlayerType& t, GameState* state, QObject* obj)
@@ -8,20 +9,37 @@ Player::Player(const PlayerType& t, GameState* state, QObject* obj)
     
 }
 
+PlayerType Player::getType()
+{
+    return type;
+}
+
+GameState* Player::getGameState()
+{
+    return gameState;
+}
+
+QVariantHash* Player::getStateData()
+{
+    return &stateData;
+}
+
+
+
 
 HumanPlayer::HumanPlayer(const PlayerType& t, GameState* state, QObject* obj)
         : Player(t, state, obj)
 {
-    QtState* wait(new QtState);
+    QtState* wait(new WaitState(this));
     wait->assignProperty(statusObj, "text", "Waiting");
-    QtState* end(new QtState);
+    QtState* end(new EndState(this));
     end->assignProperty(statusObj, "text", "");
     
-    QtState* play(new QtState);
+    QtState* play(new PlayState(this));
     
-    QtState* selectPiece(new QtState(play));
+    QtState* selectPiece(new SelectPieceState(this, play));
     selectPiece->assignProperty(statusObj, "text", "Select piece");    
-    QtState* selectDest(new QtState(play));
+    QtState* selectDest(new SelectDestState(this, play));
     selectDest->assignProperty(statusObj, "text", "Play");
     
     wait->addTransition(this, SIGNAL(opponentPlayed()), play);
@@ -50,9 +68,9 @@ HumanPlayer::HumanPlayer(const PlayerType& t, GameState* state, QObject* obj)
     play->setInitialState(selectPiece);
     
     if (t == Defense) {
-        QtState* chooseStartPos1(new QtState);
+        QtState* chooseStartPos1(new ChooseStartPos(this));
         chooseStartPos1->assignProperty(statusObj, "text", "Start pos (1/2)");
-        QtState* chooseStartPos2(new QtState);
+        QtState* chooseStartPos2(new ChooseStartPos(this));
         chooseStartPos2->assignProperty(statusObj, "text", "Start pos (2/2)");
         
         OpenSquareClicked* t1(new OpenSquareClicked(this));
@@ -73,4 +91,38 @@ HumanPlayer::HumanPlayer(const PlayerType& t, GameState* state, QObject* obj)
     }
     
     machine->start();
+}
+
+
+PlayerState::PlayerState(Player* p, QtState* st = 0)
+        : QtState(st), player(p)
+{ }
+
+WaitState::WaitState(Player* p) : PlayerState(p)
+{ }
+
+EndState::EndState(Player* p) : PlayerState(p)
+{ }
+
+PlayState::PlayState(Player* p) : PlayerState(p)
+{ }
+
+SelectPieceState::SelectPieceState(Player* p, QtState* st)
+        : PlayerState(p, st)
+{ }
+
+SelectDestState::SelectDestState(Player* p, QtState* st)
+        : PlayerState(p, st)
+{ }
+
+ChooseStartPos::ChooseStartPos(Player* p) : PlayerState(p)
+{
+    connect(this, SIGNAL(createPiece(int,int,PlayerType)), p,
+            SIGNAL(createPiece(int,int,PlayerType)));
+}
+
+void ChooseStartPos::onExit()
+{
+   QPoint square = player->getStateData()->value("selectedSquare").toPoint();
+   emit createPiece(square.x(), square.y(), player->getType());
 }

@@ -19,6 +19,17 @@ void AssaultScene::characterChanged(const QPixmap *defense, const QPixmap *attac
     attackPixmap = attack;
 }
 
+void AssaultScene::insertPiece(int i, int j, PlayerType p) {
+    PieceItem* item;
+    const QPixmap* pic = (p == Attack ? attackPixmap : defensePixmap);
+    
+    item = new PieceItem(*pic, i, j);
+    item->setPos(boardToScene(i, j));
+    
+    connect(item, SIGNAL(clicked(int, int)), SIGNAL(pieceClicked(int,int)));
+    addItem(pieces[i][j] = item);
+}
+
 void AssaultScene::layoutItems()
 {    
     for (int i = 0; i < boardSize; ++i) {    
@@ -32,14 +43,8 @@ void AssaultScene::layoutItems()
             item->setPos(boardToScene(i, j) + QPoint(0, 6));
             addItem(squares[i][j] = item);
             
-            if (!isInsideFortress(i, j)) {
-                PieceItem* item = new PieceItem(*attackPixmap, i, j);
-                
-                connect(item, SIGNAL(clicked(int,int)), SIGNAL(pieceClicked(int,int)));
-                
-                item->setPos(boardToScene(i, j));
-                addItem(pieces[i][j] = item);
-            }
+            if (!isInsideFortress(i, j))
+                insertPiece(i, j, Attack);
         }
     }
 }

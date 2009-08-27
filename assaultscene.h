@@ -23,6 +23,7 @@ signals:
     
 public slots:
     void startGame();
+    void insertPiece(int, int, PlayerType);
     void characterChanged(const QPixmap*, const QPixmap*);
     
 private:

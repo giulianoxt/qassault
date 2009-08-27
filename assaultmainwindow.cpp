@@ -2,6 +2,7 @@
 #include "ui_assaultmainwindow.h"
 #include "assaultitems.h"
 #include "util.h"
+#include "game.h"
 
 
 AssaultMainWindow::AssaultMainWindow(QWidget *parent)
@@ -49,6 +50,7 @@ void AssaultMainWindow::setupSceneToPlayer(AssaultScene* scene, Player* p)
 {
     connect(scene, SIGNAL(pieceClicked(int,int)), p, SIGNAL(pieceClicked(int,int)));
     connect(scene, SIGNAL(squareClicked(int,int)), p, SIGNAL(squareClicked(int,int)));
+    connect(p, SIGNAL(createPiece(int,int,PlayerType)), scene, SLOT(insertPiece(int,int,PlayerType)));
 }
 
 void AssaultMainWindow::startGame()
@@ -63,8 +65,11 @@ void AssaultMainWindow::startGame()
     }
     
     scene = new AssaultScene;
-    attack = new HumanPlayer(Attack, NULL, ui->scoreBoardStatusP1);
-    defense = new HumanPlayer(Defense, NULL, ui->scoreBoardStatusP2);
+    GameState* state = new GameState;
+    state->clear();
+    
+    attack = new HumanPlayer(Attack, state, ui->scoreBoardStatusP1);
+    defense = new HumanPlayer(Defense, state, ui->scoreBoardStatusP2);
     
     setupSceneToPlayer(scene, attack);
     setupSceneToPlayer(scene, defense);    

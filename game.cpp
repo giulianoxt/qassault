@@ -1,5 +1,6 @@
 #include "game.h"
 #include "globals.h"
+#include <cstring>
 
 
 bool isValidSquare(int i, int j)
@@ -17,6 +18,14 @@ bool isInsideFortress(int i, int j)
 
 
 GameState::GameState()
-{
+{ }
 
+void GameState::clear()
+{
+    memset(board, Empty, sizeof board);
+}
+
+bool GameState::isOpen(int i, int j) const
+{
+    return board[i][j] == Empty;
 }
