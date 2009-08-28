@@ -1,18 +1,20 @@
 <RCC>
-  <qresource prefix="/resources" >
-    <file>resources/mage.png</file>
-    <file>resources/icon.png</file>
-    <file>resources/board.png</file>
-    <file>resources/background.png</file>
-    <file>resources/game_button.png</file>
-    <file>resources/knight_example.png</file>
-    <file>resources/knight_example_2.png</file>
-    <file>resources/pc_ai_button.png</file>
-    <file>resources/player1.png</file>
-    <file>resources/player2.png</file>
-    <file>resources/score_board.png</file>
-    <file>resources/stats_button.png</file>
-    <file>resources/xt.png</file>
-    <file>resources/spot.png</file>
-  </qresource>
+    <qresource prefix="/resources" >
+        <file>resources/mage.png</file>
+        <file>resources/icon.png</file>
+        <file>resources/board.png</file>
+        <file>resources/background.png</file>
+        <file>resources/game_button.png</file>
+        <file>resources/knight_example.png</file>
+        <file>resources/knight_example_2.png</file>
+        <file>resources/pc_ai_button.png</file>
+        <file>resources/player1.png</file>
+        <file>resources/player2.png</file>
+        <file>resources/score_board.png</file>
+        <file>resources/stats_button.png</file>
+        <file>resources/xt.png</file>
+        <file>resources/spot.png</file>
+        <file>resources/spot_2.png</file>
+        <file>resources/spot_3.png</file>
+    </qresource>
 </RCC>

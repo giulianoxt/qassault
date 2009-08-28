@@ -26,11 +26,11 @@ void AssaultMainWindow::setupUi()
     
     origDefensePic.load(":/resources/resources/mage.png");
     origAttackPic.load(":/resources/resources/knight_example_2.png");
-
-    SquareItem::setSpotPic(QPixmap(":/resources/resources/spot.png"));
     
     updateDefensePic();
     updateAttackPic();
+    
+    SquareItem::loadImages();
 }
 
 void AssaultMainWindow::setupConnections()
@@ -48,13 +48,28 @@ void AssaultMainWindow::setupConnections()
 
 void AssaultMainWindow::setupSceneToPlayer(AssaultScene* scene, Player* p)
 {
-    connect(scene, SIGNAL(pieceClicked(int,int)), p, SIGNAL(pieceClicked(int,int)));
-    connect(scene, SIGNAL(squareClicked(int,int)), p, SIGNAL(squareClicked(int,int)));
-    connect(p, SIGNAL(createPiece(int,int,PlayerType)), scene, SLOT(insertPiece(int,int,PlayerType)));
+    connect(scene, SIGNAL(pieceClicked(int,int)),
+            p, SIGNAL(pieceClicked(int,int)));
+    connect(scene, SIGNAL(squareClicked(int,int)),
+            p, SIGNAL(squareClicked(int,int)));
+    connect(p, SIGNAL(createPiece(int,int,PlayerType)),
+            scene, SLOT(insertPiece(int,int,PlayerType)));
+    connect(p, SIGNAL(highlightSquares(const QVector<QPoint>)),
+            scene, SLOT(highlightSquares(const QVector<QPoint>)));
+    connect(p, SIGNAL(blankSquares(const QVector<QPoint>)),
+            scene, SLOT(blankSquares(const QVector<QPoint>)));
+    connect(p, SIGNAL(movePiece(int,int,int,int)),
+            scene, SLOT(movePiece(int, int, int, int)));
+}
+
+void AssaultMainWindow::setupPlayerToPlayer(Player* attack, Player* defense)
+{
+    connect(attack, SIGNAL(played()), defense, SIGNAL(opponentPlayed()));
+    connect(defense, SIGNAL(played()), attack, SIGNAL(opponentPlayed()));
 }
 
 void AssaultMainWindow::startGame()
-{    
+{
     if (scene) {
         delete scene;
     }
@@ -66,13 +81,14 @@ void AssaultMainWindow::startGame()
     
     scene = new AssaultScene;
     GameState* state = new GameState;
-    state->clear();
+    state->init();
     
     attack = new HumanPlayer(Attack, state, ui->scoreBoardStatusP1);
     defense = new HumanPlayer(Defense, state, ui->scoreBoardStatusP2);
     
     setupSceneToPlayer(scene, attack);
-    setupSceneToPlayer(scene, defense);    
+    setupSceneToPlayer(scene, defense); 
+    setupPlayerToPlayer(attack, defense);
     
     ui->scoreBoardPictureP1->setPixmap(*ui->attackPicture->pixmap());
     ui->scoreBoardPictureP2->setPixmap(*ui->defensePicture->pixmap());

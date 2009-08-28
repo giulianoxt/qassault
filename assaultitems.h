@@ -9,11 +9,16 @@
 class SquareItem : public QObject, public QGraphicsRectItem
 {
     Q_OBJECT
-    
+       
 public:
+    enum SquareState {
+        Highlight, Destination, Kill, Blank
+    };
+    
     SquareItem(int, int);
     
-    static void setSpotPic(const QPixmap&);
+    static void loadImages();
+    void changeState(SquareState);
     
 signals:
     void clicked(int, int);
@@ -23,9 +28,10 @@ private:
     void hoverLeaveEvent(QGraphicsSceneHoverEvent*);
     void mousePressEvent(QGraphicsSceneMouseEvent*);
     
-    static QBrush spotPic;
-    
     int i, j;
+    SquareState state;
+    
+    static QBrush highlightPic, destPic, killPic, blankPic;
 };
 
 #endif // ASSAULTITEMS_H

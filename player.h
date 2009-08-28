@@ -23,6 +23,9 @@ public:
     PlayerType getType();    
     GameState* getGameState();
     QVariantHash* getStateData();
+
+public slots:
+    void move(int, int, int, int);
     
 signals:
     // Input 
@@ -32,7 +35,11 @@ signals:
     void squareClicked(int, int);
     
     // Output
+    void played();
     void createPiece(int, int, PlayerType);
+    void highlightSquares(const QVector<QPoint>);
+    void blankSquares(const QVector<QPoint>);
+    void movePiece(int, int, int, int);
     
 protected:
     PlayerType type;
@@ -95,22 +102,37 @@ public:
 };
 
 class SelectDestState : public PlayerState
-{
+{ Q_OBJECT
+    
 public:
     SelectDestState(Player*, QtState*);
+
+signals:
+    void highlightSquares(const QVector<QPoint>);
+    void blankSquares(const QVector<QPoint>);
+    void move(int, int, int, int);
+    
+protected:
+    QVector<QPoint> chosen;
+    virtual void onEntry();
+    virtual void onExit();
 };
 
 class ChooseStartPos : public PlayerState
 { Q_OBJECT
     
 public:
-    ChooseStartPos(Player*);
-
+    ChooseStartPos(Player*, int);
+    
 signals:
     void createPiece(int, int, PlayerType);
+    void doneChoosing();
     
 protected:
     virtual void onExit();
+
+private:
+    int n;
 };
 
 #endif // PLAYER_H

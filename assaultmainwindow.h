@@ -27,6 +27,7 @@ private slots:
 private:
     void setupUi();
     void setupConnections();
+    void setupPlayerToPlayer(Player*, Player*);
     void setupSceneToPlayer(AssaultScene*, Player*);
     
     Ui::AssaultMainWindow *ui;

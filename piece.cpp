@@ -1,11 +1,20 @@
 #include "piece.h"
 #include "globals.h"
-#include<iostream>
-using namespace std;
+#include "util.h"
 
-PieceItem::PieceItem(const QPixmap& pic, int _i, int _j) : i(_i), j(_j)
+
+PieceItem::PieceItem(const QPixmap& pic, int i, int j)
 {
     setPixmap(pic);
+    move(i, j);
+}
+
+void PieceItem::move(int ni, int nj)
+{
+    i = ni;
+    j = nj;
+    
+    setPos(boardToScene(i, j));
 }
 
 void PieceItem::setPixmap(const QPixmap& pic)

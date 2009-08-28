@@ -10,10 +10,12 @@ class PieceItem : public QObject, public QGraphicsPixmapItem
     
 public:
     PieceItem(const QPixmap&, int, int);
+    
+    void move(int, int);
 
 signals:
     void clicked(int, int);
-    
+
 private:   
     void mousePressEvent(QGraphicsSceneMouseEvent*);    
     void setPixmap(const QPixmap&);

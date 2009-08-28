@@ -1,8 +1,11 @@
-#include "transitions.h"
 #include <QList>
 #include <QPoint>
 #include <QVariant>
 #include <QtSignalEvent>
+
+#include "transitions.h"
+#include "game.h"
+#include "util.h"
 
 
 ConditionalSignalTransition::ConditionalSignalTransition(Player* p, const char* sig)
@@ -34,7 +37,15 @@ OpenSquareClicked::OpenSquareClicked(Player* p)
 
 bool OpenSquareClicked::trigger(int i, int j) const
 {
-    if (player->getGameState()->isOpen(i, j)) {
+    bool open = player->getGameState()->isOpen(i, j);
+    
+    QList<QPoint> l = fromVariantList<QPoint>(
+            player->getStateData()->value("destSquares")
+    );
+    
+    bool dest = findPos(i, j, l);
+    
+    if (open && !dest) {
         player->getStateData()->insert("selectedSquare", QPoint(i, j));
         return true;
     }
@@ -50,7 +61,15 @@ PieceClicked::PieceClicked(Player* p)
 
 bool PieceClicked::trigger(int i, int j) const
 {
-    return true;
+    SquareT st1 = squareType(player->getType());
+    SquareT st2 = player->getGameState()->get(i, j);
+    if (st1 == st2) {
+        player->getStateData()->insert("selectedPiece", QPoint(i, j));
+        return true;
+    }
+    else {
+        return false;
+    }
 }
 
 
@@ -60,5 +79,15 @@ DestSquareClicked::DestSquareClicked(Player* p)
 
 bool DestSquareClicked::trigger(int i, int j) const
 {
-    return true;
+    QVariant variantMovesL = player->getStateData()->value("destSquares");
+    QList<QPoint> moves = fromVariantList<QPoint>(variantMovesL);
+    
+    if (findPos(i, j, moves)) {
+        player->getStateData()->insert("selectedSquare", QPoint(i, j));
+        player->getStateData()->insert("destSquareClicked", true);
+        return true;
+    }
+    else {
+        return false;
+    }
 }
