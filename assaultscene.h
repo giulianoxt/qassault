@@ -2,6 +2,7 @@
 #define ASSAULTSCENE_H
 
 #include <QPoint>
+#include <QList>
 #include <QVector>
 #include <QGraphicsScene>
 #include <QGraphicsItem>
@@ -27,9 +28,9 @@ public slots:
     void startGame();
     void insertPiece(int, int, PlayerType);
     void characterChanged(const QPixmap*, const QPixmap*);
-    void highlightSquares(const QVector<QPoint>);
-    void blankSquares(const QVector<QPoint>);
-    void movePiece(int, int, int, int);
+    void highlightMoves(const QList<Move>&);
+    void blankMoves(const QList<Move>&);
+    void movePiece(const Move&);
     
 private:
     void layoutItems();    

@@ -39,14 +39,33 @@ bool OpenSquareClicked::trigger(int i, int j) const
 {
     bool open = player->getGameState()->isOpen(i, j);
     
-    QList<QPoint> l = fromVariantList<QPoint>(
-            player->getStateData()->value("destSquares")
+    QList<Move> l = fromVariantList<Move>(
+            player->getStateData()->value("destMoves")
     );
     
-    bool dest = findPos(i, j, l);
+    bool dest = isDestinySquare(i, j, l);
     
     if (open && !dest) {
         player->getStateData()->insert("selectedSquare", QPoint(i, j));
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+
+SelfSquareClicked::SelfSquareClicked(Player* p)
+        : ConditionalSignalTransition(p, SIGNAL(squareClicked(int,int)))
+{ }
+
+bool SelfSquareClicked::trigger(int i, int j) const
+{
+    SquareT st1 = squareType(player->getType());
+    SquareT st2 = player->getGameState()->get(i, j);
+    
+    if (st1 == st2) {
+        player->getStateData()->insert("selectedPiece", QPoint(i, j));
         return true;
     }
     else {
@@ -63,8 +82,29 @@ bool PieceClicked::trigger(int i, int j) const
 {
     SquareT st1 = squareType(player->getType());
     SquareT st2 = player->getGameState()->get(i, j);
+    
     if (st1 == st2) {
         player->getStateData()->insert("selectedPiece", QPoint(i, j));
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+
+DestDiagonalPieceClicked::DestDiagonalPieceClicked(Player* p)
+        : ConditionalSignalTransition(p, SIGNAL(pieceClicked(int,int)))
+{ }
+
+bool DestDiagonalPieceClicked::trigger(int i, int j) const
+{
+    QVariant l = player->getStateData()->value("destMoves");
+    QList<Move> moves = fromVariantList<Move>(l);
+    
+    if (isDestinySquare(i, j, moves)) {
+        player->getStateData()->insert("selectedSquare", QPoint(i, j));
+        player->getStateData()->insert("destSquareClicked", true);
         return true;
     }
     else {
@@ -79,10 +119,10 @@ DestSquareClicked::DestSquareClicked(Player* p)
 
 bool DestSquareClicked::trigger(int i, int j) const
 {
-    QVariant variantMovesL = player->getStateData()->value("destSquares");
-    QList<QPoint> moves = fromVariantList<QPoint>(variantMovesL);
+    QVariant l = player->getStateData()->value("destMoves");
+    QList<Move> moves = fromVariantList<Move>(l);
     
-    if (findPos(i, j, moves)) {
+    if (isDestinySquare(i, j, moves)) {
         player->getStateData()->insert("selectedSquare", QPoint(i, j));
         player->getStateData()->insert("destSquareClicked", true);
         return true;

@@ -8,7 +8,7 @@ Player::Player(const PlayerType& t, GameState* state, QObject* obj)
         : type(t), statusObj(obj), gameState(state),
           machine(new QtStateMachine(this))
 {
-    connect(this, SIGNAL(movePiece(int,int,int,int)), SIGNAL(played()));
+    connect(this, SIGNAL(movePiece(const Move&)), SIGNAL(played()));
 }
 
 PlayerType Player::getType()
@@ -26,10 +26,10 @@ QVariantHash* Player::getStateData()
     return &stateData;
 }
 
-void Player::move(int i, int j, int ni, int nj)
+void Player::move(const Move& m)
 {
-    gameState->move(i, j, ni, nj);
-    emit movePiece(i, j, ni, nj);
+    gameState->move(m);
+    emit movePiece(m);
 }
 
 
@@ -57,20 +57,30 @@ HumanPlayer::HumanPlayer(const PlayerType& t, GameState* state, QObject* obj)
     t1->setTargetState(selectDest);
     selectPiece->addTransition(t1);
     
-    // selectDest -> PieceClicked -> selectDest
-    PieceClicked* t2(new PieceClicked(this));
+    // selectPiece -> SelfSquareClicked -> selectDest
+    SelfSquareClicked* t2(new SelfSquareClicked(this));
     t2->setTargetState(selectDest);
-    selectDest->addTransition(t2);
+    selectPiece->addTransition(t2);
     
-    // selectDest -> OpenSquareClicked -> selectPiece
-    OpenSquareClicked* t3(new OpenSquareClicked(this));
-    t3->setTargetState(selectPiece);
+    // selectDest -> PieceClicked -> selectDest
+    PieceClicked* t3(new PieceClicked(this));
+    t3->setTargetState(selectDest);
     selectDest->addTransition(t3);
     
-    // selectDest -> DestSquareClicked -> wait
-    DestSquareClicked* t4(new DestSquareClicked(this));
-    t4->setTargetState(wait);
+    // selectDest -> OpenSquareClicked -> selectPiece
+    OpenSquareClicked* t4(new OpenSquareClicked(this));
+    t4->setTargetState(selectPiece);
     selectDest->addTransition(t4);
+    
+    // selectDest -> DestSquareClicked -> wait
+    DestSquareClicked* t5(new DestSquareClicked(this));
+    t5->setTargetState(wait);
+    selectDest->addTransition(t5);
+    
+    // selectDest -> DestDiagonalPieceClicked -> wait
+    DestDiagonalPieceClicked* t6(new DestDiagonalPieceClicked(this));
+    t6->setTargetState(wait);
+    selectDest->addTransition(t6);
     
     machine->addState(wait);
     machine->addState(end);
@@ -130,12 +140,12 @@ SelectPieceState::SelectPieceState(Player* p, QtState* st)
 SelectDestState::SelectDestState(Player* p, QtState* st)
         : PlayerState(p, st)
 {
-    connect(this, SIGNAL(highlightSquares(const QVector<QPoint>)),
-            p, SIGNAL(highlightSquares(const QVector<QPoint>)));
-    connect(this, SIGNAL(blankSquares(const QVector<QPoint>)),
-            p, SIGNAL(blankSquares(const QVector<QPoint>)));
-    connect(this, SIGNAL(move(int,int,int,int)),
-            p, SLOT(move(int,int,int,int)));
+    connect(this, SIGNAL(highlightMoves(const QList<Move>&)),
+            p, SIGNAL(highlightMoves(const QList<Move>&)));
+    connect(this, SIGNAL(blankMoves(const QList<Move>&)),
+            p, SIGNAL(blankMoves(const QList<Move>&)));
+    connect(this, SIGNAL(move(const Move&)),
+            p, SLOT(move(const Move&)));
 }
 
 void SelectDestState::onEntry()
@@ -143,23 +153,22 @@ void SelectDestState::onEntry()
     QPoint piecePos = player->getStateData()->value("selectedPiece").toPoint();
     int i = piecePos.x(), j = piecePos.y();
     
-    chosen = player->getGameState()->moves(i, j);
+    destMoves = player->getGameState()->moves(i, j);
     
-    QList<QVariant> l = toVariantList<QVector<QPoint>, QPoint>(chosen);
+    QList<QVariant> l = toVariantList<QList<Move>,Move>(destMoves);
     
-    player->getStateData()->insert("destSquares", l);
+    player->getStateData()->insert("destMoves", l);
     
-    emit highlightSquares(chosen);
+    emit highlightMoves(destMoves);
 }
 
 void SelectDestState::onExit()
 {
-    emit blankSquares(chosen);
-    chosen.clear();
+    emit blankMoves(destMoves);
     
     QVariantHash* data = player->getStateData();
     
-    data->remove("destSquares");
+    data->remove("destMoves");
     
     bool destSelected = data->value("destSquareClicked", false).toBool();
     data->remove("destSquareClicked");
@@ -168,8 +177,14 @@ void SelectDestState::onExit()
         QPoint p1 = data->value("selectedPiece").toPoint();
         QPoint p2 = data->value("selectedSquare").toPoint();
         
-        emit move(p1.x(), p1.y(), p2.x(), p2.y());
+        foreach(const Move& m, destMoves)
+            if (m.origin() == p1 && m.destiny() == p2) {
+                emit move(m);
+                break;
+            }
     }
+    
+    destMoves.clear();
 }
 
         
@@ -186,10 +201,9 @@ void ChooseStartPos::onExit()
    QPoint square = player->getStateData()->value("selectedSquare").toPoint();
    
    int i = square.x(), j = square.y();
-   PlayerType type = player->getType();
    
-   emit createPiece(i, j, type);
-   player->getGameState()->set(i, j, squareType(type));
+   emit createPiece(i, j, Defense);
+   player->getGameState()->insertDefensePiece(i, j);
    
    if (n == 2) emit doneChoosing();
 }

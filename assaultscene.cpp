@@ -31,10 +31,21 @@ void AssaultScene::insertPiece(int i, int j, PlayerType p) {
     addItem(pieces[i][j] = item);
 }
 
-void AssaultScene::movePiece(int i, int j, int ni, int nj)
+void AssaultScene::movePiece(const Move& m)
 {
-    pieces[ni][nj] = pieces[i][j];
-    pieces[ni][nj]->move(ni, nj);
+    if (!m.isDiagonalKill()) {
+        int i = m.origin().x(), j = m.origin().y();
+        int ni = m.destiny().x(), nj = m.destiny().y();
+    
+        pieces[ni][nj] = pieces[i][j];
+        pieces[ni][nj]->move(ni, nj);
+    }
+    
+    foreach (const QPoint& p, m.kills()) {
+        int i = p.x(), j = p.y();
+        removeItem(pieces[i][j]);
+        delete pieces[i][j];
+    }
 }
 
 void AssaultScene::layoutItems()
@@ -56,18 +67,28 @@ void AssaultScene::layoutItems()
     }
 }
 
-void AssaultScene::highlightSquares(const QVector<QPoint> v)
+void AssaultScene::highlightMoves(const QList<Move>& l)
 {
-    foreach(const QPoint& p, v) {
-        int i = p.x(), j = p.y();
-        squares[i][j]->changeState(SquareItem::Destination);
+    foreach(const Move& m, l) {
+        int di = m.destiny().x(), dj = m.destiny().y();
+        squares[di][dj]->changeState(SquareItem::Destination);
+        
+        foreach(const QPoint& p, m.kills()) {
+            int ki = p.x(), kj = p.y();
+            squares[ki][kj]->changeState(SquareItem::Kill);
+        }
     }
 }
 
-void AssaultScene::blankSquares(const QVector<QPoint> v)
+void AssaultScene::blankMoves(const QList<Move>& l)
 {
-    foreach(const QPoint& p, v) {
-        int i = p.x(), j = p.y();
-        squares[i][j]->changeState(SquareItem::Blank);
+    foreach(const Move& m, l) {
+        int di = m.destiny().x(), dj = m.destiny().y();
+        squares[di][dj]->changeState(SquareItem::Blank);
+        
+        foreach (const QPoint& p, m.kills()) {
+            int ki = p.x(), kj = p.y();
+            squares[ki][kj]->changeState(SquareItem::Blank);
+        }
     }
 }

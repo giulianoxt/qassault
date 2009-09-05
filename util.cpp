@@ -39,4 +39,7 @@ QPoint boardToScene(int i, int j)
     return QPoint(j * squareStep + offset, i * squareStep + offset);
 }
 
-
+ostream& operator<<(ostream& out, const QPoint& p)
+{
+    return out << "(" << p.x() << "," << p.y() << ")";
+}

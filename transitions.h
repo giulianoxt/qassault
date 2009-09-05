@@ -27,6 +27,13 @@ protected:
     bool trigger(int, int) const;
 };
 
+class SelfSquareClicked : public ConditionalSignalTransition
+{
+public:
+    SelfSquareClicked(Player*);
+protected:
+    bool trigger(int, int) const;
+};
 
 class PieceClicked : public ConditionalSignalTransition
 {
@@ -36,6 +43,13 @@ protected:
     bool trigger(int, int) const;
 };
 
+class DestDiagonalPieceClicked : public ConditionalSignalTransition
+{
+public:
+    DestDiagonalPieceClicked(Player*);
+protected:
+    bool trigger(int, int) const;
+};
 
 class DestSquareClicked : public ConditionalSignalTransition
 {

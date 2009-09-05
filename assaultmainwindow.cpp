@@ -54,12 +54,12 @@ void AssaultMainWindow::setupSceneToPlayer(AssaultScene* scene, Player* p)
             p, SIGNAL(squareClicked(int,int)));
     connect(p, SIGNAL(createPiece(int,int,PlayerType)),
             scene, SLOT(insertPiece(int,int,PlayerType)));
-    connect(p, SIGNAL(highlightSquares(const QVector<QPoint>)),
-            scene, SLOT(highlightSquares(const QVector<QPoint>)));
-    connect(p, SIGNAL(blankSquares(const QVector<QPoint>)),
-            scene, SLOT(blankSquares(const QVector<QPoint>)));
-    connect(p, SIGNAL(movePiece(int,int,int,int)),
-            scene, SLOT(movePiece(int, int, int, int)));
+    connect(p, SIGNAL(highlightMoves(const QList<Move>&)),
+            scene, SLOT(highlightMoves(const QList<Move>&)));
+    connect(p, SIGNAL(blankMoves(const QList<Move>&)),
+            scene, SLOT(blankMoves(const QList<Move>&)));
+    connect(p, SIGNAL(movePiece(const Move&)),
+            scene, SLOT(movePiece(const Move&)));
 }
 
 void AssaultMainWindow::setupPlayerToPlayer(Player* attack, Player* defense)

@@ -22,14 +22,21 @@ void changeColors(QPixmap&, int, int);
 
 QPoint boardToScene(int, int);
 
-template<typename V>
-bool findPos(int i, int j, const V& v)
+ostream& operator<<(ostream&, const QPoint&);
+
+template<typename T>
+ostream& operator<<(ostream& out, const QList<T>& l)
 {
-    foreach(const QPoint& p, v)
-        if (p.x() == i && p.y() == j)
-            return true;
+    out << '[';
     
-    return false;
+    bool f = true;
+    foreach(const T& x, l) {
+        if (f) f = false;
+        else out << ", ";
+        out << x;
+    }
+    
+    return out << ']';
 }
 
 template<typename V, typename T>
@@ -37,8 +44,11 @@ const QList<QVariant> toVariantList(const V& v)
 {
     QList<QVariant> l;
     
-    foreach (const T& x, v)
-        l.push_back(QVariant(x));
+    foreach (const T& x, v) {
+        QVariant v;
+        v.setValue(x);
+        l.push_back(v);
+    }
     
     return l;
 }
