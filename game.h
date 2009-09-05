@@ -36,7 +36,9 @@ public:
     GameState(const GameState&);
     
     void init();
-    void clear();
+    
+    bool gameOver() const;
+    bool gameOver(PlayerType&) const;
     
     bool isOpen(int, int) const;
     SquareT get(int, int) const;
@@ -55,13 +57,14 @@ private:
     void set(const QPoint&, SquareT);
     const QList<Move> attackMoves(int, int) const;
     const QList<Move> defenseMoves(int, int) const;
+        
+    bool has_def;
+    uint attackOnFort;
+    QPoint defA, defB;
+    QList<Move> movA, movB;
     
     uint attackSz, defenseSz;
     SquareT board[boardSize][boardSize];
-    
-    bool has_def;
-    QPoint defA, defB;
-    QList<Move> movA, movB;
     
 friend ostream& operator<<(ostream&, const GameState&);
 };

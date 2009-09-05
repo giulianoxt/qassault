@@ -41,10 +41,7 @@ SquareT squareType(PlayerType t)
 
 
 GameState::GameState()
-{
-    defA = defB = QPoint(0, 0);
-    has_def = false;
-}
+{ }
 
 GameState::GameState(const GameState& st)
 {
@@ -55,17 +52,8 @@ GameState::GameState(const GameState& st)
     defB = st.defB;
     movA = st.movA;
     movB = st.movB;
+    attackOnFort = st.attackOnFort;
     memcpy(board, st.board, sizeof board);
-}
-
-void GameState::clear()
-{
-    memset(board, Empty, sizeof board);
-    attackSz = defenseSz = 0;
-    has_def = false;
-    defA = defB = QPoint(0, 0);
-    movA.clear();
-    movB.clear();
 }
 
 void GameState::init()
@@ -76,6 +64,32 @@ void GameState::init()
     
     attackSz = 24;
     defenseSz = 0;
+    has_def = false;
+    defA = defB = QPoint(0, 0);
+    movA.clear();
+    movB.clear();
+    attackOnFort = 0;
+}
+
+bool GameState::gameOver() const
+{
+    PlayerType p;
+    return gameOver(p);
+}
+
+bool GameState::gameOver(PlayerType& p) const
+{
+    if (attackOnFort == 9 || (movA.empty() && movB.empty())) {
+        p = Attack;
+        return true;
+    }
+    else if (attackSz <= 8) {
+        p = Defense;
+        return true;
+    }
+    else {
+        return false;
+    }
 }
 
 bool GameState::isOpen(int i, int j) const
@@ -112,7 +126,13 @@ void GameState::insertDefensePiece(int i, int j)
 
 void GameState::set(int i, int j, SquareT t)
 {
+    if (board[i][j] == AttackPiece && isInsideFortress(i,j))
+        --attackOnFort;
+    
     board[i][j] = t;
+    
+    if (t == AttackPiece && isInsideFortress(i, j))
+        ++attackOnFort;
 }
 
 void GameState::set(const QPoint& p, SquareT t)
@@ -294,6 +314,7 @@ ostream& operator<<(ostream& out, const GameState& st)
     out << "GameState<" << endl
         << " attackSz = " << st.attackSz << endl
         << " defenseSz = " << st.defenseSz << endl
+        << " attacOnFort = " << st.attackOnFort << endl
         << " has_def = " << st.has_def << endl
         << " defA = " << st.defA << endl
         << " movA = " << st.movA << endl
