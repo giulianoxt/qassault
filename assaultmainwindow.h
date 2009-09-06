@@ -4,12 +4,12 @@
 #include <QtGui/QWidget>
 #include <QtGui/QPaintEvent>
 #include "assaultscene.h"
+#include "scoreboard.h"
 #include "player.h"
 
-namespace Ui
-{
-    class AssaultMainWindow;
-}
+
+namespace Ui { class AssaultMainWindow; }
+
 
 class AssaultMainWindow : public QWidget
 {
@@ -18,23 +18,32 @@ class AssaultMainWindow : public QWidget
 public:
     AssaultMainWindow(QWidget *parent = 0);
     ~AssaultMainWindow();
-    
+
+signals:
+    // Output
+    void gameEnded(PlayerType);
+
 private slots:
     void startGame();
+    void turnEnded();
     void updateAttackPic();
     void updateDefensePic();
     
 private:
     void setupUi();
     void setupConnections();
-    void setupPlayerToPlayer(Player*, Player*);
+    void setupPlayers();
     void setupSceneToPlayer(AssaultScene*, Player*);
+    void gameOver(PlayerType);
     
     Ui::AssaultMainWindow *ui;
     QPixmap origAttackPic, origDefensePic;
     
 private:
-    AssaultScene *scene;
+    AssaultScene* scene;
+    ScoreBoard* scoreBoard;
+    
+    GameState* state;
     Player *attack, *defense;
 };
 

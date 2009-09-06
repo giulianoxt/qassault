@@ -29,7 +29,7 @@ public slots:
     
 signals:
     // Input 
-    void gameEnded();
+    void gameEnded(PlayerType);
     void opponentPlayed();
     void pieceClicked(int, int);
     void squareClicked(int, int);

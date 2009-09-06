@@ -49,8 +49,8 @@ HumanPlayer::HumanPlayer(const PlayerType& t, GameState* state, QObject* obj)
     selectDest->assignProperty(statusObj, "text", "Play");
     
     wait->addTransition(this, SIGNAL(opponentPlayed()), play);
-    wait->addTransition(this, SIGNAL(gameEnded()), end);
-    play->addTransition(this, SIGNAL(gameEnded()), end);
+    wait->addTransition(this, SIGNAL(gameEnded(PlayerType)), end);
+    play->addTransition(this, SIGNAL(gameEnded(PlayerType)), end);
     
     // selectPiece -> PieceClicked -> selectDest
     PieceClicked* t1(new PieceClicked(this));
@@ -67,20 +67,25 @@ HumanPlayer::HumanPlayer(const PlayerType& t, GameState* state, QObject* obj)
     t3->setTargetState(selectDest);
     selectDest->addTransition(t3);
     
-    // selectDest -> OpenSquareClicked -> selectPiece
-    OpenSquareClicked* t4(new OpenSquareClicked(this));
-    t4->setTargetState(selectPiece);
+    // selectDest -> SelfSquareClicked -> selectDest
+    SelfSquareClicked* t4(new SelfSquareClicked(this));
+    t4->setTargetState(selectDest);
     selectDest->addTransition(t4);
     
-    // selectDest -> DestSquareClicked -> wait
-    DestSquareClicked* t5(new DestSquareClicked(this));
-    t5->setTargetState(wait);
+    // selectDest -> OpenSquareClicked -> selectPiece
+    OpenSquareClicked* t5(new OpenSquareClicked(this));
+    t5->setTargetState(selectPiece);
     selectDest->addTransition(t5);
     
-    // selectDest -> DestDiagonalPieceClicked -> wait
-    DestDiagonalPieceClicked* t6(new DestDiagonalPieceClicked(this));
+    // selectDest -> DestSquareClicked -> wait
+    DestSquareClicked* t6(new DestSquareClicked(this));
     t6->setTargetState(wait);
     selectDest->addTransition(t6);
+    
+    // selectDest -> DestDiagonalPieceClicked -> wait
+    DestDiagonalPieceClicked* t7(new DestDiagonalPieceClicked(this));
+    t7->setTargetState(wait);
+    selectDest->addTransition(t7);
     
     machine->addState(wait);
     machine->addState(end);

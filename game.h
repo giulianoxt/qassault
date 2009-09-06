@@ -40,6 +40,9 @@ public:
     bool gameOver() const;
     bool gameOver(PlayerType&) const;
     
+    uint attackSize() const;
+    uint defenseSize() const;
+    
     bool isOpen(int, int) const;
     SquareT get(int, int) const;
     SquareT get(const QPoint&) const;
@@ -50,6 +53,8 @@ public:
     GameState* copyAndMove(const Move&);
     
     const QList<Move> GameState::moves(int, int) const;
+    
+    bool operator==(const GameState&) const;
     
 private:    
     void initRound();
@@ -93,6 +98,7 @@ public:
     const QList<QPoint>& kills() const;
 
     bool operator<(const Move&) const;
+    bool operator==(const Move&) const;
     
 private:
     QPoint orig, dest;

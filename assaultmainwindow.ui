@@ -809,7 +809,7 @@
     <string>Score board</string>
    </property>
    <widget class="QWidget" name="dockWidgetContents_2">
-    <widget class="QFrame" name="scoreBoardFrame">
+    <widget class="ScoreBoard" name="scoreBoard">
      <property name="enabled">
       <bool>true</bool>
      </property>
@@ -837,7 +837,7 @@
        </rect>
       </property>
       <property name="text">
-       <string>2/2</string>
+       <string>-</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
@@ -853,7 +853,7 @@
        </rect>
       </property>
       <property name="text">
-       <string>Human</string>
+       <string>-</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
@@ -869,7 +869,7 @@
        </rect>
       </property>
       <property name="text">
-       <string>PC</string>
+       <string>-</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
@@ -885,7 +885,7 @@
        </rect>
       </property>
       <property name="text">
-       <string>16/24</string>
+       <string>-</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
@@ -901,7 +901,7 @@
        </rect>
       </property>
       <property name="text">
-       <string>10</string>
+       <string>0</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
@@ -917,7 +917,7 @@
        </rect>
       </property>
       <property name="text">
-       <string>3</string>
+       <string>0</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
@@ -1065,6 +1065,14 @@
   <zorder>dockWidget_2</zorder>
   <zorder>xtPictureLabel</zorder>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>ScoreBoard</class>
+   <extends>QFrame</extends>
+   <header>scoreboard.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources>
   <include location="images.qrc"/>
  </resources>

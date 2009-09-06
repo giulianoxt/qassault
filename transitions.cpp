@@ -60,7 +60,7 @@ SelfSquareClicked::SelfSquareClicked(Player* p)
 { }
 
 bool SelfSquareClicked::trigger(int i, int j) const
-{
+{    
     SquareT st1 = squareType(player->getType());
     SquareT st2 = player->getGameState()->get(i, j);
     

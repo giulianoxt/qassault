@@ -31,6 +31,17 @@ void AssaultMainWindow::setupUi()
     updateAttackPic();
     
     SquareItem::loadImages();
+    
+    scoreBoard = ui->scoreBoard;
+    scoreBoard->setPlayAgainButton(ui->playAgainButton);
+    scoreBoard->setAttackLabels(
+      ui->scoreBoardTypeP2,
+      ui->scoreBoardWinsP2,
+      ui->scoreBoardPiecesP2);
+    scoreBoard->setDefenseLabels(
+      ui->scoreBoardTypeP1,
+      ui->scoreBoardWinsP1,
+      ui->scoreBoardPiecesP1);
 }
 
 void AssaultMainWindow::setupConnections()
@@ -44,6 +55,9 @@ void AssaultMainWindow::setupConnections()
     connect(ui->attackSaturationSlider, SIGNAL(valueChanged(int)), SLOT(updateAttackPic()));
     connect(ui->attackColorSlider, SIGNAL(valueChanged(int)), SLOT(updateAttackPic()));
     connect(ui->attackSizeSlider, SIGNAL(valueChanged(int)), SLOT(updateAttackPic()));
+    
+    connect(this, SIGNAL(gameEnded(PlayerType)),
+            scoreBoard, SLOT(gameEnded(PlayerType)));
 }
 
 void AssaultMainWindow::setupSceneToPlayer(AssaultScene* scene, Player* p)
@@ -62,33 +76,34 @@ void AssaultMainWindow::setupSceneToPlayer(AssaultScene* scene, Player* p)
             scene, SLOT(movePiece(const Move&)));
 }
 
-void AssaultMainWindow::setupPlayerToPlayer(Player* attack, Player* defense)
+void AssaultMainWindow::setupPlayers()
 {
     connect(attack, SIGNAL(played()), defense, SIGNAL(opponentPlayed()));
     connect(defense, SIGNAL(played()), attack, SIGNAL(opponentPlayed()));
+    
+    connect(attack, SIGNAL(played()), this, SLOT(turnEnded()));
+    connect(attack, SIGNAL(played()), scoreBoard, SLOT(turnEnded()));
+    connect(defense, SIGNAL(played()), this, SLOT(turnEnded()));
+    connect(defense, SIGNAL(played()), scoreBoard, SLOT(turnEnded()));
+    
+    connect(this, SIGNAL(gameEnded(PlayerType)),
+            attack, SIGNAL(gameEnded(PlayerType)));
+    connect(this, SIGNAL(gameEnded(PlayerType)),
+            defense, SIGNAL(gameEnded(PlayerType)));
 }
 
 void AssaultMainWindow::startGame()
-{
-    if (scene) {
-        delete scene;
-    }
-    
-    if (attack && defense) {
-        delete attack;
-        delete defense;
-    }
-    
+{    
     scene = new AssaultScene;
-    GameState* state = new GameState;
+    state = new GameState;
     state->init();
     
     attack = new HumanPlayer(Attack, state, ui->scoreBoardStatusP1);
     defense = new HumanPlayer(Defense, state, ui->scoreBoardStatusP2);
-    
+
+    setupPlayers();    
     setupSceneToPlayer(scene, attack);
     setupSceneToPlayer(scene, defense); 
-    setupPlayerToPlayer(attack, defense);
     
     ui->scoreBoardPictureP1->setPixmap(*ui->attackPicture->pixmap());
     ui->scoreBoardPictureP2->setPixmap(*ui->defensePicture->pixmap());
@@ -96,6 +111,23 @@ void AssaultMainWindow::startGame()
     ui->boardGraphicsView->setScene(scene);
     scene->characterChanged(ui->defensePicture->pixmap(), ui->attackPicture->pixmap());
     scene->startGame();
+    
+    scoreBoard->startNewGame(state, attack, defense);
+}
+
+void AssaultMainWindow::turnEnded()
+{
+    PlayerType p;
+    if (state->gameOver(p)) gameOver(p);
+}
+
+void AssaultMainWindow::gameOver(PlayerType p)
+{
+    emit gameEnded(p);
+    
+    delete state;
+    attack->deleteLater();
+    defense->deleteLater();
 }
 
 void AssaultMainWindow::updateDefensePic()

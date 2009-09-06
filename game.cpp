@@ -60,7 +60,10 @@ void GameState::init()
 {
     for (int i = 0; i < boardSize; ++i)
         for (int j = 0; j < boardSize; ++j)
-            board[i][j] = isInsideFortress(i, j) ? Empty : AttackPiece;
+            if (isValidSquare(i, j))
+                board[i][j] = isInsideFortress(i, j) ? Empty : AttackPiece;
+            else
+                board[i][j] = Empty;
     
     attackSz = 24;
     defenseSz = 0;
@@ -83,13 +86,23 @@ bool GameState::gameOver(PlayerType& p) const
         p = Attack;
         return true;
     }
-    else if (attackSz <= 8) {
+    else if (attackSz < 9) {
         p = Defense;
         return true;
     }
     else {
         return false;
     }
+}
+
+uint GameState::attackSize() const
+{
+    return attackSz;
+}
+
+uint GameState::defenseSize() const
+{
+    return defenseSz;
 }
 
 bool GameState::isOpen(int i, int j) const
@@ -159,8 +172,6 @@ void GameState::move(const Move& m)
     }
         
     initRound();
-    
-    cout << *this << endl;
 }
 
 GameState* GameState::copyAndMove(const Move& m) {
@@ -308,6 +319,19 @@ void GameState::initRound()
     }
 }
 
+bool GameState::operator==(const GameState& st) const
+{
+    if (attackSz != st.attackSz         ||
+        defenseSz != st.defenseSz       ||
+        attackOnFort != st.attackOnFort ||
+        defA != st.defA                 ||
+        defB != st.defB                 ||
+        movA != st.movA                 ||
+        movB != st.movB) return false;
+    
+    return !memcmp(board, st.board, sizeof board);
+}
+
 
 ostream& operator<<(ostream& out, const GameState& st)
 {
@@ -413,4 +437,9 @@ const QList<QPoint>& Move::kills() const
 bool Move::operator<(const Move& m) const
 {
     return kill.size() < m.kill.size();
+}
+
+bool Move::operator==(const Move& m) const
+{
+    return orig == m.orig && dest == m.dest && kill == m.kill;
 }
