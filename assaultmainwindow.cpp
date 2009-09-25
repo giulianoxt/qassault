@@ -1,3 +1,4 @@
+#include <QMessageBox>
 #include "assaultmainwindow.h"
 #include "ui_assaultmainwindow.h"
 #include "assaultitems.h"
@@ -98,8 +99,23 @@ void AssaultMainWindow::startGame()
     state = new GameState;
     state->init();
     
-    attack = new HumanPlayer(Attack, state, ui->scoreBoardStatusP1);
-    defense = new HumanPlayer(Defense, state, ui->scoreBoardStatusP2);
+    if (ui->attackHumanRadioButton->isChecked()) {
+        attack = new HumanPlayer(Attack, state,
+           ui->scoreBoardStatusP1);
+    }
+    else {
+        attack = new ComputerPlayer(Attack, state,
+           ui->scoreBoardStatusP1, new DummyAI(Attack));
+    }
+    
+    if (ui->defenseHumanRadioButton->isChecked()) {
+        defense = new HumanPlayer(Defense, state,
+           ui->scoreBoardStatusP2);
+    }
+    else {
+        defense = new ComputerPlayer(Defense, state,
+           ui->scoreBoardStatusP2, new DummyAI(Defense));
+    }  
 
     setupPlayers();    
     setupSceneToPlayer(scene, attack);
@@ -128,6 +144,10 @@ void AssaultMainWindow::gameOver(PlayerType p)
     delete state;
     attack->deleteLater();
     defense->deleteLater();
+    
+    QMessageBox::information(this,
+      "Round ended", playerTypeString(p) + " wins!"
+    );
 }
 
 void AssaultMainWindow::updateDefensePic()

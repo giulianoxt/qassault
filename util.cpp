@@ -2,6 +2,11 @@
 #include "globals.h"
 
 
+int randInt(int a, int b) {
+    const float scale = rand() / float(RAND_MAX);
+    return int(scale * (b-a) + .5) + a;
+}
+
 int bounded(int x, int a, int b) {
     return max(a, min(x, b));
 }

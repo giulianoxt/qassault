@@ -15,4 +15,7 @@ const int boardSquareDistance = 18;
 const int characterHeight = 82;
 
 
+extern int aiWaitTime;
+
+
 #endif // GLOBALS_H

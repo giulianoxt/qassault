@@ -1,5 +1,7 @@
 #include <QPoint>
 #include <QVector>
+#include <QTimer>
+#include <QList>
 #include "player.h"
 #include "util.h"
 
@@ -146,16 +148,17 @@ SelectDestState::SelectDestState(Player* p, QtState* st)
         : PlayerState(p, st)
 {
     connect(this, SIGNAL(highlightMoves(const QList<Move>&)),
-            p, SIGNAL(highlightMoves(const QList<Move>&)));
+            p,    SIGNAL(highlightMoves(const QList<Move>&)));
     connect(this, SIGNAL(blankMoves(const QList<Move>&)),
-            p, SIGNAL(blankMoves(const QList<Move>&)));
+            p,    SIGNAL(blankMoves(const QList<Move>&)));
     connect(this, SIGNAL(move(const Move&)),
-            p, SLOT(move(const Move&)));
+            p,    SLOT(move(const Move&)));
 }
 
 void SelectDestState::onEntry()
 {
-    QPoint piecePos = player->getStateData()->value("selectedPiece").toPoint();
+    QPoint piecePos =
+       player->getStateData()->value("selectedPiece").toPoint();
     int i = piecePos.x(), j = piecePos.y();
     
     destMoves = player->getGameState()->moves(i, j);
@@ -197,8 +200,9 @@ ChooseStartPos::ChooseStartPos(Player* p, int _n)
         : PlayerState(p), n(_n)
 {
     connect(this, SIGNAL(createPiece(int,int,PlayerType)), p,
-            SIGNAL(createPiece(int,int,PlayerType)));
-    connect(this, SIGNAL(doneChoosing()), p, SIGNAL(played()));
+                  SIGNAL(createPiece(int,int,PlayerType)));
+    connect(this, SIGNAL(doneChoosing()), p,
+                  SIGNAL(played()));
 }
 
 void ChooseStartPos::onExit()
@@ -211,4 +215,113 @@ void ChooseStartPos::onExit()
    player->getGameState()->insertDefensePiece(i, j);
    
    if (n == 2) emit doneChoosing();
+}
+
+
+ComputerPlayer::ComputerPlayer(
+    const PlayerType& t, GameState* st, QObject* obj, AIPlayer* _ai)
+        : Player(t, st, obj), ai(_ai)
+{
+    QtState* wait(new AIWaitState(this));
+    wait->assignProperty(statusObj, "text", "Waiting");
+    QtState* end(new EndState(this));
+    end->assignProperty(statusObj, "text", "Ended");
+    QtState* play(new AIPlayState(this));
+    play->assignProperty(statusObj, "text", "Playing");
+
+    wait->addTransition(this, SIGNAL(gameEnded(PlayerType)), end);
+    play->addTransition(this, SIGNAL(gameEnded(PlayerType)), end);
+    
+    wait->addTransition(this, SIGNAL(opponentPlayed()), play);    
+    play->addTransition(this, SIGNAL(played()), wait);
+    
+    machine->addState(wait);
+    machine->addState(end);
+    machine->addState(play);
+    
+    if (t == Defense) {
+        QtState* choosePos(new AIChoosePosState(this));
+        choosePos->assignProperty(statusObj, "text", "Choosing Pos");
+        
+        choosePos->addTransition(this, SIGNAL(played()), wait);
+        
+        machine->addState(choosePos);
+        machine->setInitialState(choosePos);
+    }
+    else {
+        machine->setInitialState(wait);
+    }
+    
+    machine->start();
+}
+
+
+AIChoosePosState::AIChoosePosState(Player* p) : PlayerState(p)
+{
+    connect(this, SIGNAL(createPiece(int,int,PlayerType)),
+            p, SIGNAL(createPiece(int,int,PlayerType)));
+    connect(this, SIGNAL(doneChoosing()),
+            p, SIGNAL(played()));
+}
+
+void AIChoosePosState::onEntry()
+{
+    int k = 0;
+    GameState* st = player->getGameState();
+    
+    while (k < 2) {
+        int i = randInt(2,4), j = randInt(2,4);
+        
+        if (st->isOpen(i, j)) {
+            ++k;
+            st->insertDefensePiece(i, j);
+            emit createPiece(i, j, Defense);            
+        }
+    }
+        
+    emit doneChoosing();
+}
+
+
+AIWaitState::AIWaitState(Player* p) : PlayerState(p)
+{ }
+
+
+AIPlayState::AIPlayState(Player* p) : PlayerState(p)
+{
+    connect(this, SIGNAL(highlightMoves(const QList<Move>&)),
+            p, SIGNAL(highlightMoves(const QList<Move>&)));
+    connect(this, SIGNAL(blankMoves(const QList<Move>&)),
+            p, SIGNAL(blankMoves(const QList<Move>&)));
+}
+
+void AIPlayState::onEntry()
+{
+    GameState* st = player->getGameState();    
+    ComputerPlayer* p = dynamic_cast<ComputerPlayer*>(player);
+    
+    m = p->ai->play(*st);
+    
+    doHighlight();
+    QTimer::singleShot(aiWaitTime, this, SLOT(doMove()));
+}
+
+void AIPlayState::doMove()
+{
+    doBlank();
+    player->move(m);
+}
+
+void AIPlayState::doHighlight()
+{
+    QList<Move> l;
+    l << m;
+    emit highlightMoves(l);
+}
+
+void AIPlayState::doBlank()
+{
+    QList<Move> l;
+    l << m;
+    emit blankMoves(l);
 }

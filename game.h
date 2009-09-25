@@ -6,6 +6,7 @@
 #include <QVector>
 #include <QMetaType>
 #include "globals.h"
+#include "util.h"
 #include <iostream>
 using std::ostream;
 using std::cout;
@@ -19,6 +20,8 @@ bool isDestinySquare(int, int, const QList<Move>&);
         
 
 enum PlayerType { Attack, Defense };
+
+QString playerTypeString(PlayerType);
 
 typedef char SquareT;
 const SquareT AttackPiece = 'A';
@@ -52,7 +55,8 @@ public:
     void move(const Move&);
     GameState* copyAndMove(const Move&);
     
-    const QList<Move> GameState::moves(int, int) const;
+    const QList<Move> moves(int, int) const;
+    const QList<Move> moves(const PlayerType&) const;
     
     bool operator==(const GameState&) const;
     

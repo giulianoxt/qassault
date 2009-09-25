@@ -31,6 +31,13 @@ bool isDestinySquare(int i, int j, const QList<Move>& l)
     return false;
 }
 
+QString playerTypeString(PlayerType t) {
+    if (t == Attack)
+        return "Attack";
+    else
+        return "Defense";
+}
+
 SquareT squareType(PlayerType t)
 {
     if (t == Attack)
@@ -191,7 +198,37 @@ const QList<Move> GameState::moves(int i, int j) const
         return QList<Move>();
     }
 }
+ 
+const QList<Move> GameState::moves(const PlayerType& p) const {    
+    QList<Move> moves;
     
+    if (p == Defense) {
+        moves.append(movA);
+        moves.append(movB);
+    }
+    else {
+        static const int movesA[4][2] = {
+            {-1, 0}, {1, 0}, {0, -1}, {0, 1}
+        };
+        
+        for_(i, 0, boardSize) for_(j, 0, boardSize) {
+            QPoint p(i, j);
+            
+            if (!isValidSquare(i, j) || board[i][j] != AttackPiece)
+                continue;
+            
+            for_(m, 0, 8) {
+                int ni = i + movesA[m][0], nj = j + movesA[m][1];
+                
+                if (isValidSquare(ni, nj) && isOpen(ni, nj))
+                    moves.push_back(Move(p, QPoint(ni, nj)));
+            }
+        }
+    }
+    
+    return moves;
+}
+
 const QList<Move> GameState::attackMoves(int i, int j) const
 {   
     static const int moves[4][2] = {

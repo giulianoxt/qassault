@@ -13,7 +13,9 @@ SOURCES += main.cpp \
     player.cpp \
     game.cpp \
     transitions.cpp \
-    scoreboard.cpp
+    scoreboard.cpp \
+    aiplayer.cpp \
+    globals.cpp
 HEADERS += assaultmainwindow.h \
     assaultscene.h \
     globals.h \
@@ -23,7 +25,8 @@ HEADERS += assaultmainwindow.h \
     player.h \
     game.h \
     transitions.h \
-    scoreboard.h
+    scoreboard.h \
+    aiplayer.h
 FORMS += assaultmainwindow.ui
 CONFIG += console
 RESOURCES += images.qrc

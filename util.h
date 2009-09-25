@@ -11,10 +11,14 @@
 #include <QVariant>
 #include <QtSignalTransition>
 
+#include <cstdlib>
 #include <iostream>
 #include <algorithm>
+#define for_(i,a,b) for (int i = a; i < b; ++i)
 using namespace std;
 
+
+int randInt(int, int);
 
 double sliderRealValue(const QSlider&);
 

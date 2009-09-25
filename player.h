@@ -7,6 +7,9 @@
 #include <QtStateMachine>
 #include "game.h"
 #include "transitions.h"
+#include "aiplayer.h"
+#include "util.h"
+#include "globals.h"
 
 class OpenSquareClicked;
 class PieceClicked;
@@ -56,14 +59,6 @@ class HumanPlayer : public Player
 
 public:
     HumanPlayer(const PlayerType&, GameState*, QObject*);
-};
-
-
-class ComputerPlayer : public Player
-{
-
-public:
-    ComputerPlayer(const PlayerType&, GameState*, QObject*);
 };
 
 
@@ -135,5 +130,63 @@ protected:
 private:
     int n;
 };
+
+
+class ComputerPlayer : public Player
+{ Q_OBJECT
+
+public:
+    ComputerPlayer(const PlayerType&, GameState*, QObject*, AIPlayer*);
+
+signals:
+    void choose();
+
+public:
+    AIPlayer* ai;
+};
+
+
+class AIChoosePosState : public PlayerState
+{ Q_OBJECT
+    
+public:
+    AIChoosePosState(Player*);
+
+signals:
+    void createPiece(int, int, PlayerType);
+    void doneChoosing();
+
+protected:
+    virtual void onEntry();
+    
+};
+
+class AIWaitState : public PlayerState
+{
+public:
+    AIWaitState(Player*);
+};
+
+
+class AIPlayState : public PlayerState
+{ Q_OBJECT
+    
+public:
+    AIPlayState(Player*);
+    
+signals:
+    void highlightMoves(const QList<Move>&);
+    void blankMoves(const QList<Move>&);
+    
+private slots:
+    void doMove();
+    void doHighlight();
+    void doBlank();
+    
+protected:
+    Move m;
+    virtual void onEntry();
+};
+
 
 #endif // PLAYER_H
