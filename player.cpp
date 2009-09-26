@@ -11,6 +11,7 @@ Player::Player(const PlayerType& t, GameState* state, QObject* obj)
           machine(new QtStateMachine(this))
 {
     connect(this, SIGNAL(movePiece(const Move&)), SIGNAL(played()));
+    connect(this, SIGNAL(gameEnded(PlayerType)), machine, SLOT(stop()));
 }
 
 PlayerType Player::getType()
@@ -244,6 +245,7 @@ ComputerPlayer::ComputerPlayer(
         choosePos->assignProperty(statusObj, "text", "Choosing Pos");
         
         choosePos->addTransition(this, SIGNAL(played()), wait);
+        choosePos->addTransition(this, SIGNAL(gameEnded(PlayerType)), end);
         
         machine->addState(choosePos);
         machine->setInitialState(choosePos);
@@ -296,7 +298,7 @@ AIPlayState::AIPlayState(Player* p) : PlayerState(p)
 }
 
 void AIPlayState::onEntry()
-{
+{    
     GameState* st = player->getGameState();    
     ComputerPlayer* p = dynamic_cast<ComputerPlayer*>(player);
     

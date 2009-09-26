@@ -14,6 +14,7 @@
 #include <cstdlib>
 #include <iostream>
 #include <algorithm>
+#define dump(x) cout << #x << " = " << (x) << endl;
 #define for_(i,a,b) for (int i = a; i < b; ++i)
 using namespace std;
 

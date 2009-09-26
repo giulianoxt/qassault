@@ -1,3 +1,3 @@
 #include "globals.h"
 
-int aiWaitTime = 1000;
+int aiWaitTime = 200;

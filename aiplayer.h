@@ -4,7 +4,6 @@
 #include "game.h"
 #include "util.h"
 
-
 class AIPlayer
 {
 public:
