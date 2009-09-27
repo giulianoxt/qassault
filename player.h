@@ -1,6 +1,7 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
+#include <QTimer>
 #include <QObject>
 #include <QtState>
 #include <QVariant>
@@ -179,13 +180,16 @@ signals:
     void blankMoves(const QList<Move>&);
     
 private slots:
-    void doMove();
-    void doHighlight();
-    void doBlank();
+    void terminateAI();
+    
+protected:
+    virtual void onEntry();
+    virtual void onExit();
+    AIPlayer* getAIPlayer();
     
 protected:
     Move m;
-    virtual void onEntry();
+    QTimer aiTimer;
 };
 
 

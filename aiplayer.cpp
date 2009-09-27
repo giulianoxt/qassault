@@ -1,21 +1,39 @@
 #include "aiplayer.h"
 #include <iostream>
+#include <cassert>
+#include <algorithm>
 using namespace std;
 
 
 AIPlayer::AIPlayer(PlayerType p) : type(p)
-{ }
+{
+    reset(NULL);
+}
+
+void AIPlayer::reset(GameState* st)
+{
+    state = st;
+    done = false;
+}
+
+void AIPlayer::timeout()
+{
+    done = true;
+}
+
+Move AIPlayer::getMove()
+{
+    return chosen_move;
+}
 
 
 DummyAI::DummyAI(PlayerType p) : AIPlayer(p)
-{ } 
+{ }
 
-const Move DummyAI::play(const GameState& st)
+void DummyAI::run()
 {
-   const QList<Move> moves = st.moves(type);   
-   
-   int i = randInt(0, moves.size()-1);
-   
-   Move m = moves.at(i);
-   return m;
+    const QList<Move> moves = state->moves(type);
+    QList<Move> copy(moves);
+    random_shuffle(copy.begin(), copy.end());
+    chosen_move = copy.back();
 }

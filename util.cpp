@@ -1,10 +1,10 @@
 #include "util.h"
 #include "globals.h"
 
-
-int randInt(int a, int b) {
-    const float scale = rand() / float(RAND_MAX);
-    return int(scale * (b-a) + .5) + a;
+int randInt(int n) {
+    double scale = rand() / double(RAND_MAX);
+    int r = scale * n;
+    return r;
 }
 
 int bounded(int x, int a, int b) {

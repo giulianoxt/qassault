@@ -19,7 +19,7 @@
 using namespace std;
 
 
-int randInt(int, int);
+int randInt(int);
 
 double sliderRealValue(const QSlider&);
 

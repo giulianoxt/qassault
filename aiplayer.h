@@ -3,15 +3,29 @@
 
 #include "game.h"
 #include "util.h"
+#include <QThread>
+#include <QAtomicInt>
 
-class AIPlayer
+
+class AIPlayer : public QThread
 {
 public:
     AIPlayer(PlayerType);
-    virtual const Move play(const GameState&) = 0;
     
+    Move getMove();
+    void reset(GameState*);
+
+public slots:
+    void timeout();
+
 protected:
+    virtual void run() = 0;
+
+protected:    
+    Move chosen_move;
+    GameState* state;
     PlayerType type;
+    QAtomicInt done;
 };
 
 
@@ -19,7 +33,9 @@ class DummyAI : public AIPlayer
 {
 public:
     DummyAI(PlayerType);
-    virtual const Move play(const GameState&);
+
+protected:
+    virtual void run();
 };
 
 

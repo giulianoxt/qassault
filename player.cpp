@@ -234,7 +234,7 @@ ComputerPlayer::ComputerPlayer(
     play->addTransition(this, SIGNAL(gameEnded(PlayerType)), end);
     
     wait->addTransition(this, SIGNAL(opponentPlayed()), play);    
-    play->addTransition(this, SIGNAL(played()), wait);
+    play->addTransition(ai, SIGNAL(finished()), wait);
     
     machine->addState(wait);
     machine->addState(end);
@@ -254,6 +254,7 @@ ComputerPlayer::ComputerPlayer(
         machine->setInitialState(wait);
     }
     
+    machine->setErrorState(end);
     machine->start();
 }
 
@@ -272,7 +273,7 @@ void AIChoosePosState::onEntry()
     GameState* st = player->getGameState();
     
     while (k < 2) {
-        int i = randInt(2,4), j = randInt(2,4);
+        int i = randInt(3)+2, j = randInt(3)+2;
         
         if (st->isOpen(i, j)) {
             ++k;
@@ -290,40 +291,42 @@ AIWaitState::AIWaitState(Player* p) : PlayerState(p)
 
 
 AIPlayState::AIPlayState(Player* p) : PlayerState(p)
-{
+{    
     connect(this, SIGNAL(highlightMoves(const QList<Move>&)),
             p, SIGNAL(highlightMoves(const QList<Move>&)));
     connect(this, SIGNAL(blankMoves(const QList<Move>&)),
             p, SIGNAL(blankMoves(const QList<Move>&)));
+    connect(&aiTimer, SIGNAL(timeout()), this, SLOT(terminateAI()));
+    
+    aiTimer.setSingleShot(true);
 }
 
 void AIPlayState::onEntry()
-{    
-    GameState* st = player->getGameState();    
-    ComputerPlayer* p = dynamic_cast<ComputerPlayer*>(player);
+{
+    AIPlayer* ai = getAIPlayer();
+    ai->reset(player->getGameState());
+    ai->start();
     
-    m = p->ai->play(*st);
+    aiTimer.start(aiWaitTime);
+}
+
+void AIPlayState::terminateAI()
+{
+    getAIPlayer()->timeout();
+}
+
+void AIPlayState::onExit()
+{
+    aiTimer.stop();
     
-    doHighlight();
-    QTimer::singleShot(aiWaitTime, this, SLOT(doMove()));
+    if (getAIPlayer()->isFinished())
+        player->move(getAIPlayer()->getMove());
+    else
+        getAIPlayer()->terminate();
 }
 
-void AIPlayState::doMove()
+AIPlayer* AIPlayState::getAIPlayer()
 {
-    doBlank();
-    player->move(m);
-}
-
-void AIPlayState::doHighlight()
-{
-    QList<Move> l;
-    l << m;
-    emit highlightMoves(l);
-}
-
-void AIPlayState::doBlank()
-{
-    QList<Move> l;
-    l << m;
-    emit blankMoves(l);
+    ComputerPlayer* cplayer = dynamic_cast<ComputerPlayer*>(player);
+    return cplayer->ai;
 }

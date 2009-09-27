@@ -22,10 +22,16 @@ public:
 signals:
     // Output
     void gameEnded(PlayerType);
+    void attackPlayed();
+    void defensePlayed();
 
 private slots:
     void startGame();
-    void turnEnded();
+    
+    void attackTurnEnded();
+    void defenseTurnEnded();
+    void turnEnded(PlayerType);
+    
     void updateAttackPic();
     void updateDefensePic();
     
@@ -35,6 +41,9 @@ private:
     void setupPlayers();
     void setupSceneToPlayer(AssaultScene*, Player*);
     void gameOver(PlayerType);
+    
+    Player* getPlayer(PlayerType);
+    Player* getOponnentPlayer(PlayerType);
     
     Ui::AssaultMainWindow *ui;
     QPixmap origAttackPic, origDefensePic;

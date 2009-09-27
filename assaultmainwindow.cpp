@@ -79,12 +79,13 @@ void AssaultMainWindow::setupSceneToPlayer(AssaultScene* scene, Player* p)
 
 void AssaultMainWindow::setupPlayers()
 {
-    connect(attack, SIGNAL(played()), defense, SIGNAL(opponentPlayed()));
-    connect(defense, SIGNAL(played()), attack, SIGNAL(opponentPlayed()));
+    connect(attack, SIGNAL(played()), this, SLOT(attackTurnEnded()));
+    connect(defense, SIGNAL(played()), this, SLOT(defenseTurnEnded()));
     
-    connect(attack, SIGNAL(played()), this, SLOT(turnEnded()));
+    connect(this, SIGNAL(attackPlayed()), defense, SIGNAL(opponentPlayed()));
+    connect(this, SIGNAL(defensePlayed()), attack, SIGNAL(opponentPlayed()));
+    
     connect(attack, SIGNAL(played()), scoreBoard, SLOT(turnEnded()));
-    connect(defense, SIGNAL(played()), this, SLOT(turnEnded()));
     connect(defense, SIGNAL(played()), scoreBoard, SLOT(turnEnded()));
     
     connect(this, SIGNAL(gameEnded(PlayerType)),
@@ -120,9 +121,9 @@ void AssaultMainWindow::startGame()
     setupPlayers();    
     setupSceneToPlayer(scene, attack);
     setupSceneToPlayer(scene, defense); 
-    
-    ui->scoreBoardPictureP1->setPixmap(*ui->attackPicture->pixmap());
-    ui->scoreBoardPictureP2->setPixmap(*ui->defensePicture->pixmap());
+
+    ui->scoreBoardPictureP1->setPixmap(*ui->defensePicture->pixmap());    
+    ui->scoreBoardPictureP2->setPixmap(*ui->attackPicture->pixmap());
     
     ui->boardGraphicsView->setScene(scene);
     scene->characterChanged(ui->defensePicture->pixmap(), ui->attackPicture->pixmap());
@@ -131,10 +132,28 @@ void AssaultMainWindow::startGame()
     scoreBoard->startNewGame(state, attack, defense);
 }
 
-void AssaultMainWindow::turnEnded()
+void AssaultMainWindow::attackTurnEnded()
 {
-    PlayerType p;
-    if (state->gameOver(p)) gameOver(p);
+    turnEnded(Attack);
+}
+
+void AssaultMainWindow::defenseTurnEnded()
+{
+    turnEnded(Defense);
+}
+
+void AssaultMainWindow::turnEnded(PlayerType p)
+{        
+    PlayerType winner;
+    if (state->gameOver(winner)) {
+        gameOver(winner);
+    }
+    else {
+        if (p == Attack)
+            emit attackPlayed();
+        else
+            emit defensePlayed();
+    }
 }
 
 void AssaultMainWindow::gameOver(PlayerType p)
@@ -145,9 +164,11 @@ void AssaultMainWindow::gameOver(PlayerType p)
     attack->deleteLater();
     defense->deleteLater();
     
-    QMessageBox::information(this,
-      "Round ended", playerTypeString(p) + " wins!"
-    );
+    QMessageBox* box(new QMessageBox(this));
+    box->setWindowTitle("Round ended");
+    box->setText(playerTypeString(p) + " wins!");
+    box->setParent(this);
+    box->show();
 }
 
 void AssaultMainWindow::updateDefensePic()
@@ -168,4 +189,14 @@ void AssaultMainWindow::updateAttackPic()
     changeColors(newPic, ui->attackColorSlider->value(), ui->attackSaturationSlider->value());
     
     ui->attackPicture->setPixmap(newPic);
+}
+
+Player* AssaultMainWindow::getPlayer(PlayerType p)
+{
+    return (p == Attack ? attack : defense);
+}
+
+Player* AssaultMainWindow::getOponnentPlayer(PlayerType p)
+{
+    return (p == Defense ? attack : defense);
 }
