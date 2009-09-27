@@ -17,5 +17,7 @@ const int characterHeight = 82;
 
 extern int aiWaitTime;
 
+extern int movingAnimationDuration;
+
 
 #endif // GLOBALS_H

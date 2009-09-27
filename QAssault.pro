@@ -2,7 +2,8 @@
 # Project created by QtCreator 2009-08-18T22:06:27
 # -------------------------------------------------
 include(C:\GiulianoXT\bin\qtstatemachine-1.1-opensource\src\statemachine.pri)
-#include(C:\GiulianoXT\bin\qtanimationframework-2.3-opensource\src\qtanimationframework.pri)
+
+# include(C:\GiulianoXT\bin\qtanimationframework-2.3-opensource\src\qtanimationframework.pri)
 TARGET = QAssault
 TEMPLATE = app
 SOURCES += main.cpp \
@@ -16,7 +17,8 @@ SOURCES += main.cpp \
     transitions.cpp \
     scoreboard.cpp \
     aiplayer.cpp \
-    globals.cpp
+    globals.cpp \
+    animations.cpp
 HEADERS += assaultmainwindow.h \
     assaultscene.h \
     globals.h \
@@ -27,7 +29,8 @@ HEADERS += assaultmainwindow.h \
     game.h \
     transitions.h \
     scoreboard.h \
-    aiplayer.h
+    aiplayer.h \
+    animations.h
 FORMS += assaultmainwindow.ui
 CONFIG += console
 RESOURCES += images.qrc

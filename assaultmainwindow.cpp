@@ -102,20 +102,20 @@ void AssaultMainWindow::startGame()
     
     if (ui->attackHumanRadioButton->isChecked()) {
         attack = new HumanPlayer(Attack, state,
-           ui->scoreBoardStatusP1);
+           ui->scoreBoardStatusP2);
     }
     else {
         attack = new ComputerPlayer(Attack, state,
-           ui->scoreBoardStatusP1, new DummyAI(Attack));
+           ui->scoreBoardStatusP2, new DummyAI(Attack));
     }
     
     if (ui->defenseHumanRadioButton->isChecked()) {
         defense = new HumanPlayer(Defense, state,
-           ui->scoreBoardStatusP2);
+           ui->scoreBoardStatusP1);
     }
     else {
         defense = new ComputerPlayer(Defense, state,
-           ui->scoreBoardStatusP2, new DummyAI(Defense));
+           ui->scoreBoardStatusP1, new DummyAI(Defense));
     }  
 
     setupPlayers();    

@@ -26,6 +26,7 @@ double sliderRealValue(const QSlider&);
 void changeColors(QPixmap&, int, int);
 
 QPoint boardToScene(int, int);
+QPoint boardToScene(const QPoint&);
 
 ostream& operator<<(ostream&, const QPoint&);
 

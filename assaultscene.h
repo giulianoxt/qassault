@@ -13,12 +13,15 @@
 #include "assaultitems.h"
 
 
+// Singleton
 class AssaultScene : public QGraphicsScene
 {    
     Q_OBJECT
     
 public:
     AssaultScene();
+    PieceItem* getPiece(int, int);
+    PieceItem* getPiece(const QPoint&);
 
 signals:
     void pieceClicked(int, int);    
@@ -38,6 +41,12 @@ private:
     const QPixmap *defensePixmap, *attackPixmap;
     SquareItem* squares[boardSize][boardSize];
     PieceItem* pieces[boardSize][boardSize];
+
+public:
+    static AssaultScene* getInstance();
+
+protected:
+    static AssaultScene* instance;
 };
 
 #endif // ASSAULTSCENE_H

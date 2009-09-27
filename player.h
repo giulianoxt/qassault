@@ -7,6 +7,7 @@
 #include <QVariant>
 #include <QtStateMachine>
 #include "game.h"
+#include "animations.h"
 #include "transitions.h"
 #include "aiplayer.h"
 #include "util.h"
@@ -107,7 +108,6 @@ signals:
     // Output
     void highlightMoves(const QList<Move>&);
     void blankMoves(const QList<Move>&);
-    void move(const Move&);
     
 protected:
     QList<Move> destMoves;
@@ -175,10 +175,6 @@ class AIPlayState : public PlayerState
 public:
     AIPlayState(Player*);
     
-signals:
-    void highlightMoves(const QList<Move>&);
-    void blankMoves(const QList<Move>&);
-    
 private slots:
     void terminateAI();
     
@@ -188,9 +184,31 @@ protected:
     AIPlayer* getAIPlayer();
     
 protected:
-    Move m;
     QTimer aiTimer;
 };
 
+
+class PieceMovingState : public PlayerState
+{ Q_OBJECT
+    
+public:
+    PieceMovingState(Player*);
+    void addFinishedTransition(QtState*);
+
+signals:
+    // Output
+    void highlightMoves(const QList<Move>&);
+    void blankMoves(const QList<Move>&);
+    
+protected:
+    virtual void onEntry();
+    virtual void onExit();
+    
+    QList<Move> possibleMoves();
+    
+protected:
+    Move m;
+    PieceMovingAnimation animation;
+};
 
 #endif // PLAYER_H

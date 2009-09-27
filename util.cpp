@@ -3,8 +3,7 @@
 
 int randInt(int n) {
     double scale = rand() / double(RAND_MAX);
-    int r = scale * n;
-    return r;
+    return int(scale * n);
 }
 
 int bounded(int x, int a, int b) {
@@ -42,6 +41,11 @@ QPoint boardToScene(int i, int j)
     int offset = -3 * squareStep;
     
     return QPoint(j * squareStep + offset, i * squareStep + offset);
+}
+
+QPoint boardToScene(const QPoint& p)
+{
+    return boardToScene(p.x(), p.y());
 }
 
 ostream& operator<<(ostream& out, const QPoint& p)

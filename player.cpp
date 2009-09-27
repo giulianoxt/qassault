@@ -50,10 +50,13 @@ HumanPlayer::HumanPlayer(const PlayerType& t, GameState* state, QObject* obj)
     selectPiece->assignProperty(statusObj, "text", "Select piece");    
     QtState* selectDest(new SelectDestState(this, play));
     selectDest->assignProperty(statusObj, "text", "Play");
+    PieceMovingState* movingPiece(new PieceMovingState(this));
+    movingPiece->assignProperty(statusObj, "text", "Moving");
     
     wait->addTransition(this, SIGNAL(opponentPlayed()), play);
     wait->addTransition(this, SIGNAL(gameEnded(PlayerType)), end);
     play->addTransition(this, SIGNAL(gameEnded(PlayerType)), end);
+    movingPiece->addTransition(this, SIGNAL(gameEnded(PlayerType)), end);
     
     // selectPiece -> PieceClicked -> selectDest
     PieceClicked* t1(new PieceClicked(this));
@@ -80,19 +83,23 @@ HumanPlayer::HumanPlayer(const PlayerType& t, GameState* state, QObject* obj)
     t5->setTargetState(selectPiece);
     selectDest->addTransition(t5);
     
-    // selectDest -> DestSquareClicked -> wait
+    // selectDest -> DestSquareClicked -> movingPiece
     DestSquareClicked* t6(new DestSquareClicked(this));
-    t6->setTargetState(wait);
+    t6->setTargetState(movingPiece);
     selectDest->addTransition(t6);
     
-    // selectDest -> DestDiagonalPieceClicked -> wait
+    // selectDest -> DestDiagonalPieceClicked -> movingPiece
     DestDiagonalPieceClicked* t7(new DestDiagonalPieceClicked(this));
-    t7->setTargetState(wait);
+    t7->setTargetState(movingPiece);
     selectDest->addTransition(t7);
+    
+    // movingPiece -> Finished -> wait
+    movingPiece->addFinishedTransition(wait);
     
     machine->addState(wait);
     machine->addState(end);
     machine->addState(play);
+    machine->addState(movingPiece);
     play->setInitialState(selectPiece);
     
     if (t == Defense) {
@@ -152,8 +159,6 @@ SelectDestState::SelectDestState(Player* p, QtState* st)
             p,    SIGNAL(highlightMoves(const QList<Move>&)));
     connect(this, SIGNAL(blankMoves(const QList<Move>&)),
             p,    SIGNAL(blankMoves(const QList<Move>&)));
-    connect(this, SIGNAL(move(const Move&)),
-            p,    SLOT(move(const Move&)));
 }
 
 void SelectDestState::onEntry()
@@ -187,8 +192,12 @@ void SelectDestState::onExit()
         QPoint p2 = data->value("selectedSquare").toPoint();
         
         foreach(const Move& m, destMoves)
-            if (m.origin() == p1 && m.destiny() == p2) {
-                emit move(m);
+            if (m.origin() == p1 && m.destiny() == p2 ||
+                m.origin() == p1 &&
+                m.isDiagonalKill() && m.kills().front() == p2) {
+            
+                QVariant move; move.setValue(m);
+                data->insert("selectedMove", move);
                 break;
             }
     }
@@ -229,16 +238,21 @@ ComputerPlayer::ComputerPlayer(
     end->assignProperty(statusObj, "text", "Ended");
     QtState* play(new AIPlayState(this));
     play->assignProperty(statusObj, "text", "Playing");
+    PieceMovingState* moving(new PieceMovingState(this));
+    moving->assignProperty(statusObj, "text", "Moving");
 
     wait->addTransition(this, SIGNAL(gameEnded(PlayerType)), end);
     play->addTransition(this, SIGNAL(gameEnded(PlayerType)), end);
+    moving->addTransition(this, SIGNAL(gameEnded(PlayerType)), end);
     
     wait->addTransition(this, SIGNAL(opponentPlayed()), play);    
-    play->addTransition(ai, SIGNAL(finished()), wait);
+    play->addTransition(ai, SIGNAL(finished()), moving);
+    moving->addFinishedTransition(wait);
     
     machine->addState(wait);
     machine->addState(end);
     machine->addState(play);
+    machine->addState(moving);
     
     if (t == Defense) {
         QtState* choosePos(new AIChoosePosState(this));
@@ -292,12 +306,7 @@ AIWaitState::AIWaitState(Player* p) : PlayerState(p)
 
 AIPlayState::AIPlayState(Player* p) : PlayerState(p)
 {    
-    connect(this, SIGNAL(highlightMoves(const QList<Move>&)),
-            p, SIGNAL(highlightMoves(const QList<Move>&)));
-    connect(this, SIGNAL(blankMoves(const QList<Move>&)),
-            p, SIGNAL(blankMoves(const QList<Move>&)));
-    connect(&aiTimer, SIGNAL(timeout()), this, SLOT(terminateAI()));
-    
+    connect(&aiTimer, SIGNAL(timeout()), this, SLOT(terminateAI()));    
     aiTimer.setSingleShot(true);
 }
 
@@ -319,14 +328,53 @@ void AIPlayState::onExit()
 {
     aiTimer.stop();
     
-    if (getAIPlayer()->isFinished())
-        player->move(getAIPlayer()->getMove());
-    else
+    if (getAIPlayer()->isFinished()) {
+        QVariantHash* data = player->getStateData();
+        QVariant move; move.setValue(getAIPlayer()->getMove());
+        data->insert("selectedMove", move);
+    }
+    else {
         getAIPlayer()->terminate();
+    }
 }
 
 AIPlayer* AIPlayState::getAIPlayer()
 {
     ComputerPlayer* cplayer = dynamic_cast<ComputerPlayer*>(player);
     return cplayer->ai;
+}
+
+
+PieceMovingState::PieceMovingState(Player* p) : PlayerState(p)
+{
+    connect(this, SIGNAL(highlightMoves(const QList<Move>&)),
+            p,    SIGNAL(highlightMoves(const QList<Move>&)));
+    connect(this, SIGNAL(blankMoves(const QList<Move>&)),
+            p,    SIGNAL(blankMoves(const QList<Move>&)));
+}
+
+void PieceMovingState::addFinishedTransition(QtState* st)
+{
+    addTransition(&animation, SIGNAL(finished()), st);
+}
+
+void PieceMovingState::onEntry()
+{    
+    QVariant variantMove = player->getStateData()->value("selectedMove");
+    m = variantMove.value<Move>();
+    
+    emit highlightMoves(possibleMoves());
+    animation.start(m);
+}
+
+void PieceMovingState::onExit()
+{
+    emit blankMoves(possibleMoves());
+    player->move(m);
+}
+
+QList<Move> PieceMovingState::possibleMoves()
+{
+    GameState* st = player->getGameState();
+    return st->moves(m.origin().x(), m.origin().y());
 }

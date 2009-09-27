@@ -3,8 +3,11 @@
 #include "util.h"
 
 
+AssaultScene* AssaultScene::instance = NULL;
+
 AssaultScene::AssaultScene()
 {
+    instance = this;
     characterChanged(NULL, NULL);
 }
 
@@ -46,6 +49,16 @@ void AssaultScene::movePiece(const Move& m)
         removeItem(pieces[i][j]);
         delete pieces[i][j];
     }
+}
+
+PieceItem* AssaultScene::getPiece(int i, int j)
+{
+    return pieces[i][j];
+}
+
+PieceItem* AssaultScene::getPiece(const QPoint& p)
+{
+    return getPiece(p.x(), p.y());
 }
 
 void AssaultScene::layoutItems()
@@ -91,4 +104,9 @@ void AssaultScene::blankMoves(const QList<Move>& l)
             squares[ki][kj]->changeState(SquareItem::Blank);
         }
     }
+}
+
+AssaultScene* AssaultScene::getInstance()
+{
+    return instance;
 }

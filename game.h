@@ -17,6 +17,7 @@ class Move;
 bool isValidSquare(int, int);
 bool isInsideFortress(int, int);
 bool isDestinySquare(int, int, const QList<Move>&);
+bool isDiagonalKill(int, int, const QList<Move>&);
         
 
 enum PlayerType { Attack, Defense };

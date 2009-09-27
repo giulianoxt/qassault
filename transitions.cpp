@@ -102,7 +102,7 @@ bool DestDiagonalPieceClicked::trigger(int i, int j) const
     QVariant l = player->getStateData()->value("destMoves");
     QList<Move> moves = fromVariantList<Move>(l);
     
-    if (isDestinySquare(i, j, moves)) {
+    if (isDiagonalKill(i, j, moves)) {
         player->getStateData()->insert("selectedSquare", QPoint(i, j));
         player->getStateData()->insert("destSquareClicked", true);
         return true;
@@ -122,7 +122,7 @@ bool DestSquareClicked::trigger(int i, int j) const
     QVariant l = player->getStateData()->value("destMoves");
     QList<Move> moves = fromVariantList<Move>(l);
     
-    if (isDestinySquare(i, j, moves)) {
+    if (isDestinySquare(i, j, moves) || isDiagonalKill(i, j, moves)) {
         player->getStateData()->insert("selectedSquare", QPoint(i, j));
         player->getStateData()->insert("destSquareClicked", true);
         return true;

@@ -4,6 +4,7 @@
 #include <cstring>
 #include <cstdlib>
 #include <algorithm>
+#include <cassert>
 using std::sort;
 
 
@@ -26,6 +27,17 @@ bool isDestinySquare(int i, int j, const QList<Move>& l)
     
     foreach (const Move& m, l)
         if (m.destiny() == p)
+            return true;
+    
+    return false;
+}
+
+bool isDiagonalKill(int i, int j, const QList<Move>& l)
+{
+    QPoint p(i, j);
+    
+    foreach (const Move& m, l)
+        if (m.isDiagonalKill() && m.kills().front() == p)
             return true;
     
     return false;
@@ -161,7 +173,7 @@ void GameState::set(const QPoint& p, SquareT t)
 }
 
 void GameState::move(const Move& m)
-{    
+{            
     if (!m.isDiagonalKill()) {
         set(m.destiny(), get(m.origin()));
         set(m.origin(), Empty);
@@ -217,7 +229,7 @@ const QList<Move> GameState::moves(const PlayerType& p) const {
             if (!isValidSquare(i, j) || board[i][j] != AttackPiece)
                 continue;
             
-            for_(m, 0, 8) {
+            for_(m, 0, 4) {
                 int ni = i + movesA[m][0], nj = j + movesA[m][1];
                 
                 if (isValidSquare(ni, nj) && isOpen(ni, nj))
@@ -225,6 +237,9 @@ const QList<Move> GameState::moves(const PlayerType& p) const {
             }
         }
     }
+    
+    foreach(const Move& m, moves)
+        assert((m.destiny() != m.origin()) || (m.killSize() == 1));
     
     return moves;
 }
@@ -238,7 +253,7 @@ const QList<Move> GameState::attackMoves(int i, int j) const
     QList<Move> movesL;
     QPoint p(i, j);
     
-    for (int m = 0; m < 8; ++m) {
+    for (int m = 0; m < 4; ++m) {
         int ni = i + moves[m][0], nj = j + moves[m][1];
         
         if (isValidSquare(ni, nj) && isOpen(ni, nj))
@@ -290,7 +305,7 @@ void GameState::initRound()
             if (!isValidSquare(ni, nj)) continue;
             if (get(ni, nj) != AttackPiece) continue;
             
-            Move m(p, QPoint(ni,nj));
+            Move m(p, p);
             m.addKill(QPoint(ni, nj));
             moves.push_back(m);
         }
@@ -445,10 +460,8 @@ const QPoint& Move::destiny() const
 }
 
 bool Move::isDiagonalKill() const
-{
-    int di = dest.x()-orig.x(), dj = dest.y()- orig.y();
-    
-    return kill.size() && di && dj;
+{    
+    return kill.size() && (dest == orig);
 }
 
 void Move::setDestiny(const QPoint& p)
