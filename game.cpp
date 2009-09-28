@@ -4,7 +4,6 @@
 #include <cstring>
 #include <cstdlib>
 #include <algorithm>
-#include <cassert>
 using std::sort;
 
 
@@ -237,9 +236,6 @@ const QList<Move> GameState::moves(const PlayerType& p) const {
             }
         }
     }
-    
-    foreach(const Move& m, moves)
-        assert((m.destiny() != m.origin()) || (m.killSize() == 1));
     
     return moves;
 }
