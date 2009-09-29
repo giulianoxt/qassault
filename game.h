@@ -99,9 +99,12 @@ protected:
     static const int attackMovesForward[5][2];    
     
 friend ostream& operator<<(ostream&, const GameState&);
+friend istream& operator>>(istream&, GameState&);
 };
 
 ostream& operator<<(ostream&, const GameState&);
+
+istream& operator>>(istream&, GameState&);
 
 ostream& operator<<(ostream&, const Move&);
 

@@ -5,9 +5,9 @@
 #include <cstdlib>
 #include <climits>
 #include <algorithm>
-using std::sort;
-using std::max;
-using std::min;
+#include <vector>
+#include <string>
+using namespace std;
 
 
 bool isValidSquare(int i, int j)
@@ -493,6 +493,33 @@ ostream& operator<<(ostream& out, const GameState& st)
     }
     
     return out << '>';
+}
+
+istream& operator>>(istream& in, GameState& st)
+{    
+    st.movA.clear();
+    st.movB.clear();
+    st.attackOnFort = 0;
+    st.attackSz = 0;
+    st.defenseSz = 0;
+    st.has_def = false;
+    st.defA = st.defB = QPoint(0, 0);
+    memset(st.board, Empty, sizeof st.board);
+    
+    foreach_validSquare(i, j) {
+        SquareT x; in >> x;
+        switch (x) {
+            case AttackPiece:
+                ++st.attackSz;
+                st.set(i, j, AttackPiece);
+                break;
+            case DefensePiece:
+                st.insertDefensePiece(i, j);
+                break;
+        }
+    }
+    
+    return in;
 }
 
 ostream& operator<<(ostream& out, const Move& m)

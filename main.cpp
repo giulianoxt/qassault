@@ -4,7 +4,10 @@
 #include <ctime>
 #include "game.h"
 #include "assaultmainwindow.h"
-
+#include "minimax.h"
+#include <QPoint>
+#include <fstream>
+using namespace std;
 
 int main(int argc, char *argv[])
 {            
@@ -13,7 +16,7 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);     
 
     qRegisterMetaType<Move>("Move");
-    
+
     AssaultMainWindow w;
     w.show();
     
