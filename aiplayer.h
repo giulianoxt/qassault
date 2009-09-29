@@ -1,10 +1,11 @@
 #ifndef AIPLAYER_H
 #define AIPLAYER_H
 
-#include "game.h"
-#include "util.h"
 #include <QThread>
 #include <QAtomicInt>
+#include "util.h"
+#include "game.h"
+#include "minimax.h"
 
 
 class AIPlayer : public QThread
@@ -38,5 +39,24 @@ protected:
     virtual void run();
 };
 
+
+class GreedyAI : public AIPlayer
+{
+public:
+    GreedyAI(PlayerType);
+
+protected:
+    virtual void run();
+};
+
+
+class MinimaxAI : public AIPlayer
+{
+public:
+    MinimaxAI(PlayerType);
+
+protected:
+    virtual void run();
+};
 
 #endif // AIPLAYER_H

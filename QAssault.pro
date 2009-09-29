@@ -18,7 +18,8 @@ SOURCES += main.cpp \
     scoreboard.cpp \
     aiplayer.cpp \
     globals.cpp \
-    animations.cpp
+    animations.cpp \
+    minimax.cpp
 HEADERS += assaultmainwindow.h \
     assaultscene.h \
     globals.h \
@@ -30,7 +31,8 @@ HEADERS += assaultmainwindow.h \
     transitions.h \
     scoreboard.h \
     aiplayer.h \
-    animations.h
+    animations.h \
+    minimax.h
 FORMS += assaultmainwindow.ui
 CONFIG += console
 RESOURCES += images.qrc

@@ -32,6 +32,18 @@ const SquareT Empty = 'E';
 SquareT squareType(PlayerType);
 
 
+#define foreach_validSquare(i,j)\
+   for_(i, 0, boardSize) for_(j, 0, boardSize)\
+    if (isValidSquare(i, j))
+
+#define foreach_fortressSquare(i,j)\
+   for_(i, fortressBounds[0][0], fortressBounds[0][1]+1)\
+   for_(j, fortressBounds[1][0], fortressBounds[1][1]+1)
+
+#define foreach_attackPiece(i,j)\
+   foreach_validSquare(i, j) if (board[i][j] == AttackPiece)
+
+       
 class GameState
 {   
 public:
@@ -40,9 +52,11 @@ public:
     GameState(const GameState&);
     
     void init();
-    
+    void copy(const GameState&);
     bool gameOver() const;
     bool gameOver(PlayerType&) const;
+    
+    bool operator==(const GameState&) const;
     
     uint attackSize() const;
     uint defenseSize() const;
@@ -54,14 +68,17 @@ public:
     void insertDefensePiece(int, int);
     
     void move(const Move&);
-    GameState* copyAndMove(const Move&);
+    GameState* copyAndMove(const Move&) const;
+    void copyAndMove(const Move&, GameState&) const;
+    
+    double eval() const;
+    static const double evalMax; // Attack win
+    static const double evalMin; // Defense win
     
     const QList<Move> moves(int, int) const;
     const QList<Move> moves(const PlayerType&) const;
     
-    bool operator==(const GameState&) const;
-    
-private:    
+protected:    
     void initRound();
     void set(int, int, SquareT);
     void set(const QPoint&, SquareT);
@@ -75,6 +92,11 @@ private:
     
     uint attackSz, defenseSz;
     SquareT board[boardSize][boardSize];
+    
+protected:    
+    static const int defenseMovesAll[8][2];
+    static const int attackMovesAll[8][2];
+    static const int attackMovesForward[3][2];    
     
 friend ostream& operator<<(ostream&, const GameState&);
 };

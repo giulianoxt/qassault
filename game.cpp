@@ -3,8 +3,11 @@
 #include "globals.h"
 #include <cstring>
 #include <cstdlib>
+#include <climits>
 #include <algorithm>
 using std::sort;
+using std::max;
+using std::min;
 
 
 bool isValidSquare(int i, int j)
@@ -17,7 +20,12 @@ bool isValidSquare(int i, int j)
 
 bool isInsideFortress(int i, int j)
 {
-    return (i >= 2 && i <= 4 && j >= 2 && j <= 4);
+    const int minI = fortressBounds[0][0];
+    const int maxI = fortressBounds[0][1];
+    const int minJ = fortressBounds[1][0];
+    const int maxJ = fortressBounds[1][1];
+    
+    return (i >= minI && i <= maxI && j >= minJ && j <= maxJ);
 }
 
 bool isDestinySquare(int i, int j, const QList<Move>& l)
@@ -58,10 +66,54 @@ SquareT squareType(PlayerType t)
 }
 
 
+const double GameState::evalMin = double(INT_MIN);
+const double GameState::evalMax = double(INT_MAX);
+
+const int GameState::defenseMovesAll[8][2] = {
+    {-1, -1}, {-1, 0}, {-1, 1}, {0, -1},
+    {0, 1}, {1, -1}, {1, 0}, {1, 1}
+};
+
+const int GameState::attackMovesAll[8][2] = {
+    {-1, -1}, {-1, 0}, {-1, 1}, {0, -1},
+    {0, 1}, {1, -1}, {1, 0}, {1, 1}
+};
+
+const int GameState::attackMovesForward[3][2] = {
+    {-1,0}, {-1,-1}, {-1, 1}
+};
+
+
 GameState::GameState()
 { }
 
 GameState::GameState(const GameState& st)
+{
+    copy(st);
+}
+
+void GameState::init()
+{
+    attackSz = 0;
+    
+    foreach_validSquare(i, j)
+        if (isInsideFortress(i, j)) {
+            board[i][j] = Empty;
+        }
+        else {
+            board[i][j] = AttackPiece;
+            ++attackSz;
+        }
+    
+    defenseSz = 0;
+    has_def = false;
+    defA = defB = QPoint(0, 0);
+    movA.clear();
+    movB.clear();
+    attackOnFort = 0;
+}
+
+void GameState::copy(const GameState& st)
 {
     attackSz = st.attackSz;
     defenseSz = st.defenseSz;
@@ -72,24 +124,6 @@ GameState::GameState(const GameState& st)
     movB = st.movB;
     attackOnFort = st.attackOnFort;
     memcpy(board, st.board, sizeof board);
-}
-
-void GameState::init()
-{
-    for (int i = 0; i < boardSize; ++i)
-        for (int j = 0; j < boardSize; ++j)
-            if (isValidSquare(i, j))
-                board[i][j] = isInsideFortress(i, j) ? Empty : AttackPiece;
-            else
-                board[i][j] = Empty;
-    
-    attackSz = 24;
-    defenseSz = 0;
-    has_def = false;
-    defA = defB = QPoint(0, 0);
-    movA.clear();
-    movB.clear();
-    attackOnFort = 0;
 }
 
 bool GameState::gameOver() const
@@ -192,10 +226,17 @@ void GameState::move(const Move& m)
     initRound();
 }
 
-GameState* GameState::copyAndMove(const Move& m) {
+GameState* GameState::copyAndMove(const Move& m) const
+{
     GameState* st = new GameState(*this);
     st->move(m);
     return st;
+}
+
+void GameState::copyAndMove(const Move& m, GameState& st) const
+{
+    st.copy(*this);
+    st.move(m);
 }
 
 const QList<Move> GameState::moves(int i, int j) const
@@ -217,19 +258,20 @@ const QList<Move> GameState::moves(const PlayerType& p) const {
         moves.append(movA);
         moves.append(movB);
     }
-    else {
-        static const int movesA[4][2] = {
-            {-1, 0}, {1, 0}, {0, -1}, {0, 1}
-        };
-        
-        for_(i, 0, boardSize) for_(j, 0, boardSize) {
+    else {       
+        foreach_attackPiece(i, j) {            
             QPoint p(i, j);
             
-            if (!isValidSquare(i, j) || board[i][j] != AttackPiece)
-                continue;
-            
-            for_(m, 0, 4) {
-                int ni = i + movesA[m][0], nj = j + movesA[m][1];
+            if (isInsideFortress(i, j)) for_(m, 0, 8) {
+                int ni = i + attackMovesAll[m][0];
+                int nj = j + attackMovesAll[m][1];
+                
+                if (isInsideFortress(ni, nj) && isOpen(ni, nj))
+                    moves.push_back(Move(p, QPoint(ni, nj)));
+            }
+            else for_(m, 0, 3) {
+                int ni = i + attackMovesForward[m][0];
+                int nj = j + attackMovesForward[m][1];
                 
                 if (isValidSquare(ni, nj) && isOpen(ni, nj))
                     moves.push_back(Move(p, QPoint(ni, nj)));
@@ -242,21 +284,25 @@ const QList<Move> GameState::moves(const PlayerType& p) const {
 
 const QList<Move> GameState::attackMoves(int i, int j) const
 {   
-    static const int moves[4][2] = {
-        {-1, 0}, {1, 0}, {0, -1}, {0, 1}
-    };
-    
-    QList<Move> movesL;
-    QPoint p(i, j);
-    
-    for (int m = 0; m < 4; ++m) {
-        int ni = i + moves[m][0], nj = j + moves[m][1];
-        
+    QList<Move> moves;
+    const QPoint p(i, j);
+            
+    if (isInsideFortress(i, j)) for_(m, 0, 8) {
+        int ni = i + attackMovesAll[m][0];
+        int nj = j + attackMovesAll[m][1];
+                
+        if (isInsideFortress(ni, nj) && isOpen(ni, nj))
+            moves.push_back(Move(p, QPoint(ni, nj)));
+    }
+    else for_(m, 0, 3) {
+        int ni = i + attackMovesForward[m][0];
+        int nj = j + attackMovesForward[m][1];
+                
         if (isValidSquare(ni, nj) && isOpen(ni, nj))
-            movesL.push_back(Move(p, QPoint(ni, nj)));
+            moves.push_back(Move(p, QPoint(ni, nj)));
     }
     
-    return movesL;
+    return moves;
 }
 
 const QList<Move> GameState::defenseMoves(int i, int j) const
@@ -275,19 +321,6 @@ void GameState::initRound()
 {
     if (!has_def) throw "GameState::initRound";
     
-    static const int diagM[4][2] = {
-        {-1, -1},{-1, 1},{1, 1},{1, -1}
-    };
-    
-    static const int normM[4][2] = {
-        {-1, 0},{0, -1},{0, 1},{1, 0}
-    };
-    
-    static const int movesM[8][2] = {
-        {-1, -1}, {-1, 0}, {-1, 1}, {0, -1},
-        {0, 1}, {1, -1}, {1, 0}, {1, 1}
-    };
-    
     for (int k = 0; k < 2; ++k) {
         QPoint& p = !k ? defA : defB;
         
@@ -295,19 +328,9 @@ void GameState::initRound()
         
         int i = p.x(), j = p.y();
         
-        for (int d = 0; d < 4; ++d) {
-            int ni = i + diagM[d][0], nj = j + diagM[d][1];
-            
-            if (!isValidSquare(ni, nj)) continue;
-            if (get(ni, nj) != AttackPiece) continue;
-            
-            Move m(p, p);
-            m.addKill(QPoint(ni, nj));
-            moves.push_back(m);
-        }
-        
-        for (int n = 0; n < 4; ++n) {
-            int di = normM[n][0], dj = normM[n][1];
+        for_(m, 0, 8) {
+            int di = defenseMovesAll[m][0];
+            int dj = defenseMovesAll[m][1];
 
             Move m(p, p);
             
@@ -338,8 +361,9 @@ void GameState::initRound()
                 moves.pop_front();
         }
         else {
-            for (int m = 0; m < 8; ++m) {
-                int ni = i + movesM[m][0], nj = j + movesM[m][1];
+            for_(m, 0, 8) {
+                int ni = i + defenseMovesAll[m][0];
+                int nj = j + defenseMovesAll[m][1];
                 
                 if (isValidSquare(ni,nj) && isOpen(ni,nj))
                     moves.push_back(Move(p, QPoint(ni, nj)));
@@ -365,6 +389,57 @@ void GameState::initRound()
         else if (movB.front() < movA.front())
             movB.clear();
     }
+}
+
+double GameState::eval() const
+{
+    PlayerType p;
+    if (gameOver(p))
+        return (p == Attack ? evalMax : evalMin);
+
+    // max heuristics [0,1]
+    double attackOnFortH = attackOnFort / 9.0l;
+    double attackSizeH = attackSz / 24.0l;
+    
+    double numShieldedH = 0.0l;
+    foreach_fortressSquare(i, j) if (board[i][j] == AttackPiece) {
+        bool ok = true;
+        for_(m, 0, 8) {
+            int niA = i + defenseMovesAll[m][0];
+            int niB = i - defenseMovesAll[m][0];
+            int njA = j + defenseMovesAll[m][1];
+            int njB = j - defenseMovesAll[m][1];
+            if (isValidSquare(niA, njA) &&
+                isValidSquare(niB, njB) &&
+                (isOpen(niA, njA) && isOpen(niB, njB) ||
+                 (get(niA,njA) == DefensePiece && isOpen(niB,njB) ||
+                  get(niB,njB) == DefensePiece && isOpen(niA,njA)))) {
+                ok = false; break;
+            }
+        }
+        if (ok) ++numShieldedH;
+    }
+    numShieldedH /= 9;
+    
+    // min heuristics [0,1]
+    double defenseBlockedH = (!movA.empty() + !movB.empty()) / 2.0l;
+    double defenseFortressDistH = 0.0l;
+    for_(k, 0, 2) {
+        QPoint p = !k ? defA : defB;
+        int i = p.x(), j = p.y();
+        int di = max(0,i-2), dj;
+        
+        if (j < 2) dj = 2 - j;
+        else if (j > 4) dj = j - 4;
+        else dj = 0;
+        
+        defenseFortressDistH += di + dj;
+    }
+    defenseFortressDistH /= 12;
+    
+    // scalarization (INT_MIN, INT_MAX)
+    return 40 * attackOnFortH   + 30 * attackSizeH + 29 * numShieldedH +
+           28 * defenseBlockedH + 20 * defenseFortressDistH;
 }
 
 bool GameState::operator==(const GameState& st) const

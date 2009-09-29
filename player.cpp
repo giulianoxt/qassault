@@ -287,7 +287,11 @@ void AIChoosePosState::onEntry()
     GameState* st = player->getGameState();
     
     while (k < 2) {
-        int i = randInt(3)+2, j = randInt(3)+2;
+        int minI = fortressBounds[0][0], maxI = fortressBounds[0][1];
+        int minJ = fortressBounds[1][0], maxJ = fortressBounds[1][1];
+       
+        int i = randInt(maxI-minI+1) + minI;
+        int j = randInt(maxJ-minJ+1) + minJ;
         
         if (st->isOpen(i, j)) {
             ++k;

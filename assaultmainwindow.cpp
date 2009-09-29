@@ -8,7 +8,7 @@
 
 AssaultMainWindow::AssaultMainWindow(QWidget *parent)
     : QWidget(parent), ui(new Ui::AssaultMainWindow),
-      scene(NULL), attack(NULL), defense(NULL)
+      scene(NULL), state(NULL), attack(NULL), defense(NULL)
 {    
     setupUi();
     setupConnections();
@@ -96,6 +96,10 @@ void AssaultMainWindow::setupPlayers()
 
 void AssaultMainWindow::startGame()
 {    
+    if (state) delete state;
+    if (attack) delete attack;
+    if (defense) delete defense;
+    
     scene = new AssaultScene;
     state = new GameState;
     state->init();
@@ -106,7 +110,7 @@ void AssaultMainWindow::startGame()
     }
     else {
         attack = new ComputerPlayer(Attack, state,
-           ui->scoreBoardStatusP2, new DummyAI(Attack));
+           ui->scoreBoardStatusP2, new MinimaxAI(Attack));
     }
     
     if (ui->defenseHumanRadioButton->isChecked()) {
@@ -160,9 +164,12 @@ void AssaultMainWindow::gameOver(PlayerType p)
 {
     emit gameEnded(p);
     
-    delete state;
+    delete state;    
     attack->deleteLater();
     defense->deleteLater();
+    
+    state = NULL;
+    attack = defense = NULL;
     
     QMessageBox* box(new QMessageBox(this));
     box->setWindowTitle("Round ended");
