@@ -96,7 +96,7 @@ protected:
 protected:    
     static const int defenseMovesAll[8][2];
     static const int attackMovesAll[8][2];
-    static const int attackMovesForward[3][2];    
+    static const int attackMovesForward[5][2];    
     
 friend ostream& operator<<(ostream&, const GameState&);
 };

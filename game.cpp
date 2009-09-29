@@ -79,8 +79,8 @@ const int GameState::attackMovesAll[8][2] = {
     {0, 1}, {1, -1}, {1, 0}, {1, 1}
 };
 
-const int GameState::attackMovesForward[3][2] = {
-    {-1,0}, {-1,-1}, {-1, 1}
+const int GameState::attackMovesForward[5][2] = {
+    {-1,0}, {-1,-1}, {-1, 1}, {0,-1}, {0,1}
 };
 
 
@@ -269,7 +269,7 @@ const QList<Move> GameState::moves(const PlayerType& p) const {
                 if (isInsideFortress(ni, nj) && isOpen(ni, nj))
                     moves.push_back(Move(p, QPoint(ni, nj)));
             }
-            else for_(m, 0, 3) {
+            else for_(m, 0, 5) {
                 int ni = i + attackMovesForward[m][0];
                 int nj = j + attackMovesForward[m][1];
                 
@@ -294,7 +294,7 @@ const QList<Move> GameState::attackMoves(int i, int j) const
         if (isInsideFortress(ni, nj) && isOpen(ni, nj))
             moves.push_back(Move(p, QPoint(ni, nj)));
     }
-    else for_(m, 0, 3) {
+    else for_(m, 0, 5) {
         int ni = i + attackMovesForward[m][0];
         int nj = j + attackMovesForward[m][1];
                 

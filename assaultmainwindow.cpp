@@ -119,7 +119,7 @@ void AssaultMainWindow::startGame()
     }
     else {
         defense = new ComputerPlayer(Defense, state,
-           ui->scoreBoardStatusP1, new DummyAI(Defense));
+           ui->scoreBoardStatusP1, new MinimaxAI(Defense));
     }  
 
     setupPlayers();    

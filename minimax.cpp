@@ -9,8 +9,16 @@ int k;
 void minimax(const GameState& st, bool max, int& movInd)
 {
     k = 0;
-    double alpha = GameState::evalMin, beta = GameState::evalMax;
-    minimax_(st, max, moveLookaheads, movInd, alpha, beta);
+    
+    if (st.moves(max ? Attack : Defense).size() == 1) {
+        movInd = 0;
+        k = 1;
+    }
+    else {
+        double alpha = GameState::evalMin, beta = GameState::evalMax;
+        minimax_(st, max, moveLookaheads, movInd, alpha, beta);
+    }
+    
     cout << k << " nodes" << endl;
 }
 
