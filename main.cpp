@@ -13,7 +13,7 @@ int main(int argc, char *argv[])
 {            
     srand(time(0));
     
-    QApplication a(argc, argv);     
+    QApplication a(argc, argv);
 
     qRegisterMetaType<Move>("Move");
 
@@ -21,5 +21,6 @@ int main(int argc, char *argv[])
     w.show();
     
     a.setQuitOnLastWindowClosed(true);
+    
     return a.exec();
 }

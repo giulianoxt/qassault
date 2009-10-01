@@ -43,6 +43,8 @@ void AssaultMainWindow::setupUi()
       ui->scoreBoardTypeP1,
       ui->scoreBoardWinsP1,
       ui->scoreBoardPiecesP1);
+    
+    ui->loadingGif->setMovie(":/resources/resources/loading.gif");
 }
 
 void AssaultMainWindow::setupConnections()
@@ -110,7 +112,8 @@ void AssaultMainWindow::startGame()
     }
     else {
         attack = new ComputerPlayer(Attack, state,
-           ui->scoreBoardStatusP2, new MinimaxAI(Attack));
+           ui->scoreBoardStatusP2, ui->loadingGif,
+           new MinimaxAI(Attack));
     }
     
     if (ui->defenseHumanRadioButton->isChecked()) {
@@ -119,7 +122,8 @@ void AssaultMainWindow::startGame()
     }
     else {
         defense = new ComputerPlayer(Defense, state,
-           ui->scoreBoardStatusP1, new MinimaxAI(Defense));
+           ui->scoreBoardStatusP1, ui->loadingGif,
+           new GreedyAI(Defense));
     }  
 
     setupPlayers();    

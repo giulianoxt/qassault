@@ -101,7 +101,7 @@
     <value type="QString" >-r</value>
    </valuelist>
    <value key="abstractProcess.command" type="QString" >C:/Qt/2009.03/qt/bin/qmake.exe</value>
-   <value key="abstractProcess.enabled" type="bool" >false</value>
+   <value key="abstractProcess.enabled" type="bool" >true</value>
    <value key="abstractProcess.workingDirectory" type="QString" >C:/GiulianoXT/workspace/QAssault</value>
    <value key="buildConfiguration" type="int" >2</value>
   </valuemap>
@@ -242,7 +242,7 @@
     <value type="QString" >CONFIG+=release</value>
    </valuelist>
    <value key="abstractProcess.command" type="QString" >C:/Qt/2009.03/qt/bin/qmake.exe</value>
-   <value key="abstractProcess.enabled" type="bool" >true</value>
+   <value key="abstractProcess.enabled" type="bool" >false</value>
    <value key="abstractProcess.workingDirectory" type="QString" >C:/GiulianoXT/workspace/QAssault</value>
    <value key="buildConfiguration" type="int" >0</value>
   </valuemap>

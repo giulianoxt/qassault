@@ -8,6 +8,8 @@
 #include <QPoint>
 #include <QEvent>
 #include <QList>
+#include <QLabel>
+#include <QMovie>
 #include <QVariant>
 #include <QtSignalTransition>
 
@@ -76,4 +78,27 @@ void debug(const QString& msg, const T& s) {
     cout << "[" << msg.toStdString() << "] " << s << endl;
 }       
 
+
+class MovieLoopLabel : public QLabel
+{
+    Q_OBJECT
+    Q_PROPERTY(bool running READ isRunning WRITE setRunning);
+    
+public:
+    MovieLoopLabel(QWidget*);    
+    
+    void setMovie(const QString&);
+    
+    bool isRunning() const;
+    void setRunning(bool);
+    
+public slots:
+    void loop();
+    
+protected:
+    QMovie* movie;
+    bool _running;
+};
+
 #endif // UTIL_H
+

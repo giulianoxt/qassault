@@ -52,3 +52,43 @@ ostream& operator<<(ostream& out, const QPoint& p)
 {
     return out << "(" << p.x() << "," << p.y() << ")";
 }
+
+
+MovieLoopLabel::MovieLoopLabel(QWidget* p) : QLabel(p)
+{
+    setVisible(false);
+    setText("");
+}
+
+void MovieLoopLabel::setMovie(const QString& path)
+{
+    movie = new QMovie(path);
+    movie->setParent(this);
+    QLabel::setMovie(movie);
+    connect(movie, SIGNAL(finished()), this, SLOT(loop()));
+}
+
+bool MovieLoopLabel::isRunning() const
+{
+    return _running;
+}
+
+void MovieLoopLabel::setRunning(bool r)
+{
+    if (r) {
+        movie->start();
+        setVisible(true);
+    }
+    else {
+        movie->stop();
+        setVisible(false);
+    }
+    
+    _running = r;
+}
+
+void MovieLoopLabel::loop()
+{
+    if (_running)
+        movie->start();
+}

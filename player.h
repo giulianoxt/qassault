@@ -137,13 +137,15 @@ class ComputerPlayer : public Player
 { Q_OBJECT
 
 public:
-    ComputerPlayer(const PlayerType&, GameState*, QObject*, AIPlayer*);
+    ComputerPlayer(const PlayerType&, GameState*,
+                   QObject*, QObject*, AIPlayer*);
 
 signals:
     void choose();
 
 public:
     AIPlayer* ai;
+    QObject* waitBar;
 };
 
 

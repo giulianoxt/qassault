@@ -55,6 +55,7 @@ public:
     void copy(const GameState&);
     bool gameOver() const;
     bool gameOver(PlayerType&) const;
+    bool almostOver() const;
     
     bool operator==(const GameState&) const;
     

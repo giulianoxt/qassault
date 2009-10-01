@@ -2,6 +2,7 @@
 #include <QList>
 #include <string>
 
+bool oneMoveWin(const GameState&, bool, int&);
 double minimax_(const GameState&, bool, int, int&, int&, double, double);
 
 
@@ -14,8 +15,12 @@ void minimax(const GameState& st, bool max, int& movInd)
     if (st.moves(max ? Attack : Defense).size() == 1) {
         movInd = 0; k = 1;
     }
+    else if (oneMoveWin(st, max, movInd)) {
+        return;
+    }
     else {
         int steps = 0;
+        
         double eval = minimax_(st, max, moveLookaheads, movInd, steps,
                                GameState::evalMin, GameState::evalMax);
         if (eval == GameState::evalMin || eval == GameState::evalMax)
@@ -23,6 +28,26 @@ void minimax(const GameState& st, bool max, int& movInd)
     }
     
     cout << k << " nodes" << endl;
+}
+
+
+bool oneMoveWin(const GameState& st, bool max, int& movInd)
+{
+    if (!st.almostOver())
+        return false;
+    
+    movInd = 0;
+    GameState next;
+    const QList<Move> moves = st.moves(max ? Attack : Defense);
+    
+    foreach (const Move& m, moves) {
+        st.copyAndMove(m, next);
+        if (next.gameOver())
+            return true;
+        ++movInd;
+    }
+    
+    return false;
 }
 
 double minimax_(const GameState& st, bool max, int depth,

@@ -147,6 +147,11 @@ bool GameState::gameOver(PlayerType& p) const
     }
 }
 
+bool GameState::almostOver() const
+{
+    return attackOnFort == 8 || attackSz == 9;
+}
+
 uint GameState::attackSize() const
 {
     return attackSz;

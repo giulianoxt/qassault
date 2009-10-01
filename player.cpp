@@ -228,18 +228,22 @@ void ChooseStartPos::onExit()
 }
 
 
-ComputerPlayer::ComputerPlayer(
-    const PlayerType& t, GameState* st, QObject* obj, AIPlayer* _ai)
-        : Player(t, st, obj), ai(_ai)
+ComputerPlayer::ComputerPlayer(const PlayerType& t, GameState* st,
+     QObject* obj, QObject* waitB, AIPlayer* _ai)
+        : Player(t, st, obj), ai(_ai), waitBar(waitB)
 {
     QtState* wait(new AIWaitState(this));
     wait->assignProperty(statusObj, "text", "Waiting");
+    wait->assignProperty(waitBar, "running", false);
     QtState* end(new EndState(this));
     end->assignProperty(statusObj, "text", "Ended");
+    end->assignProperty(waitBar, "running", false);
     QtState* play(new AIPlayState(this));
     play->assignProperty(statusObj, "text", "Playing");
+    play->assignProperty(waitBar, "running", true);
     PieceMovingState* moving(new PieceMovingState(this));
     moving->assignProperty(statusObj, "text", "Moving");
+    moving->assignProperty(waitBar, "running", false);
 
     wait->addTransition(this, SIGNAL(gameEnded(PlayerType)), end);
     play->addTransition(this, SIGNAL(gameEnded(PlayerType)), end);
@@ -257,6 +261,7 @@ ComputerPlayer::ComputerPlayer(
     if (t == Defense) {
         QtState* choosePos(new AIChoosePosState(this));
         choosePos->assignProperty(statusObj, "text", "Choosing Pos");
+        choosePos->assignProperty(waitBar, "running", false);
         
         choosePos->addTransition(this, SIGNAL(played()), wait);
         choosePos->addTransition(this, SIGNAL(gameEnded(PlayerType)), end);
