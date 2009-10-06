@@ -17,7 +17,6 @@ class Move;
 bool isValidSquare(int, int);
 bool isInsideFortress(int, int);
 bool isDestinySquare(int, int, const QList<Move>&);
-bool isDiagonalKill(int, int, const QList<Move>&);
         
 
 enum PlayerType { Attack, Defense };
@@ -42,7 +41,7 @@ SquareT squareType(PlayerType);
 
 #define foreach_attackPiece(i,j)\
    foreach_validSquare(i, j) if (board[i][j] == AttackPiece)
-
+   
        
 class GameState
 {   
@@ -56,7 +55,9 @@ public:
     bool gameOver() const;
     bool gameOver(PlayerType&) const;
     bool almostOver() const;
+    bool isMax() const;
     
+    uint hash() const;
     bool operator==(const GameState&) const;
     
     uint attackSize() const;
@@ -79,25 +80,32 @@ public:
     const QList<Move> moves(int, int) const;
     const QList<Move> moves(const PlayerType&) const;
     
+    static void initZobrist();
+    
 protected:    
+    void initHash();
     void initRound();
     void set(int, int, SquareT);
     void set(const QPoint&, SquareT);
     const QList<Move> attackMoves(int, int) const;
     const QList<Move> defenseMoves(int, int) const;
-        
-    bool has_def;
-    uint attackOnFort;
-    QPoint defA, defB;
-    QList<Move> movA, movB;
     
-    uint attackSz, defenseSz;
+    bool max;
+    uint _hash;
+    
+    QPoint defA, defB;
+    QList<Move> movA, movB;    
+    
+    uint attackOnFort;
+    uint attackSz, defenseSz;    
+    
     SquareT board[boardSize][boardSize];
     
 protected:    
     static const int defenseMovesAll[8][2];
     static const int attackMovesAll[8][2];
-    static const int attackMovesForward[5][2];    
+    static const int attackMovesForward[5][2];   
+    static uint zobrist[boardSize][boardSize][256];
     
 friend ostream& operator<<(ostream&, const GameState&);
 friend istream& operator>>(istream&, GameState&);
@@ -116,7 +124,6 @@ public:
     Move(const Move&);
     Move(const QPoint&, const QPoint&);
     
-    bool isDiagonalKill() const;
     const QPoint& origin() const;    
     const QPoint& destiny() const;
     

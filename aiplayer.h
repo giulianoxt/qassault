@@ -30,33 +30,35 @@ protected:
 };
 
 
-class DummyAI : public AIPlayer
+class DummyPlayer : public AIPlayer
 {
 public:
-    DummyAI(PlayerType);
+    DummyPlayer(PlayerType);
 
 protected:
     virtual void run();
 };
 
 
-class GreedyAI : public AIPlayer
+class GreedyPlayer : public AIPlayer
 {
 public:
-    GreedyAI(PlayerType);
+    GreedyPlayer(PlayerType);
 
 protected:
     virtual void run();
 };
 
 
-class MinimaxAI : public AIPlayer
+class MinimaxPlayer : public AIPlayer
 {
 public:
-    MinimaxAI(PlayerType);
+    MinimaxPlayer(PlayerType, int);
 
 protected:
     virtual void run();
+    
+    MinimaxAI minimaxAI;
 };
 
 #endif // AIPLAYER_H

@@ -113,7 +113,7 @@ void AssaultMainWindow::startGame()
     else {
         attack = new ComputerPlayer(Attack, state,
            ui->scoreBoardStatusP2, ui->loadingGif,
-           new MinimaxAI(Attack));
+           new MinimaxPlayer(Attack, 7));
     }
     
     if (ui->defenseHumanRadioButton->isChecked()) {
@@ -123,8 +123,8 @@ void AssaultMainWindow::startGame()
     else {
         defense = new ComputerPlayer(Defense, state,
            ui->scoreBoardStatusP1, ui->loadingGif,
-           new GreedyAI(Defense));
-    }  
+           new MinimaxPlayer(Defense, 1));
+    }
 
     setupPlayers();    
     setupSceneToPlayer(scene, attack);

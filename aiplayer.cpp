@@ -27,10 +27,10 @@ Move AIPlayer::getMove()
 }
 
 
-DummyAI::DummyAI(PlayerType p) : AIPlayer(p)
+DummyPlayer::DummyPlayer(PlayerType p) : AIPlayer(p)
 { }
 
-void DummyAI::run()
+void DummyPlayer::run()
 {
     const QList<Move> moves = state->moves(type);
     QList<Move> copy(moves);
@@ -39,10 +39,10 @@ void DummyAI::run()
 }
 
 
-GreedyAI::GreedyAI(PlayerType p) : AIPlayer(p)
+GreedyPlayer::GreedyPlayer(PlayerType p) : AIPlayer(p)
 { }
 
-void GreedyAI::run()
+void GreedyPlayer::run()
 {
     const QList<Move> moves = state->moves(type);
     
@@ -65,12 +65,13 @@ void GreedyAI::run()
 }
 
 
-MinimaxAI::MinimaxAI(PlayerType p) : AIPlayer(p)
+MinimaxPlayer::MinimaxPlayer(PlayerType p, int l = moveLookaheads)
+        : AIPlayer(p), minimaxAI(p, l)
 { }
 
-void MinimaxAI::run()
+void MinimaxPlayer::run()
 {
-    int i;
-    minimax(*state, (type == Attack), i);
-    chosen_move = state->moves(type).at(i);
+    chosen_move = minimaxAI.searchTreeCache(*state);
+    
+    cout << chosen_move << endl;
 }

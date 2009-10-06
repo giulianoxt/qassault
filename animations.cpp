@@ -17,17 +17,15 @@ void PieceMovingAnimation::start(const Move& move)
     
     AssaultScene* scene = AssaultScene::getInstance();
     
-    if (!move.isDiagonalKill()) {
-        QGraphicsItem* movingPiece = scene->getPiece(move.origin());
+    QGraphicsItem* movingPiece = scene->getPiece(move.origin());
         
-        QGraphicsItemAnimation* anim(new QGraphicsItemAnimation);
-        anim->setItem(movingPiece);
-        anim->setTimeLine(&timeline);
-        anim->setPosAt(0, movingPiece->pos());
-        anim->setPosAt(1, boardToScene(move.destiny()));
+    QGraphicsItemAnimation* anim(new QGraphicsItemAnimation);
+    anim->setItem(movingPiece);
+    anim->setTimeLine(&timeline);
+    anim->setPosAt(0, movingPiece->pos());
+    anim->setPosAt(1, boardToScene(move.destiny()));
         
-        animations.push_back(anim);
-    }
+    animations.push_back(anim);
     
     foreach (const QPoint& p, move.kills()) {
         QGraphicsItem* killedPiece = scene->getPiece(p);

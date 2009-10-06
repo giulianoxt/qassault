@@ -88,11 +88,6 @@ HumanPlayer::HumanPlayer(const PlayerType& t, GameState* state, QObject* obj)
     t6->setTargetState(movingPiece);
     selectDest->addTransition(t6);
     
-    // selectDest -> DestDiagonalPieceClicked -> movingPiece
-    DestDiagonalPieceClicked* t7(new DestDiagonalPieceClicked(this));
-    t7->setTargetState(movingPiece);
-    selectDest->addTransition(t7);
-    
     // movingPiece -> Finished -> wait
     movingPiece->addFinishedTransition(wait);
     
@@ -192,10 +187,7 @@ void SelectDestState::onExit()
         QPoint p2 = data->value("selectedSquare").toPoint();
         
         foreach(const Move& m, destMoves)
-            if (m.origin() == p1 && m.destiny() == p2 ||
-                m.origin() == p1 &&
-                m.isDiagonalKill() && m.kills().front() == p2) {
-            
+            if (m.origin() == p1 && m.destiny() == p2) {
                 QVariant move; move.setValue(m);
                 data->insert("selectedMove", move);
                 break;
@@ -291,7 +283,7 @@ void AIChoosePosState::onEntry()
     int k = 0;
     GameState* st = player->getGameState();
     
-    while (k < 2) {
+   while (k < 2) {
         int minI = fortressBounds[0][0], maxI = fortressBounds[0][1];
         int minJ = fortressBounds[1][0], maxJ = fortressBounds[1][1];
        

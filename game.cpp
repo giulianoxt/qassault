@@ -30,21 +30,10 @@ bool isInsideFortress(int i, int j)
 
 bool isDestinySquare(int i, int j, const QList<Move>& l)
 {
-    QPoint p(i, j);
+    const QPoint p(i, j);
     
     foreach (const Move& m, l)
         if (m.destiny() == p)
-            return true;
-    
-    return false;
-}
-
-bool isDiagonalKill(int i, int j, const QList<Move>& l)
-{
-    QPoint p(i, j);
-    
-    foreach (const Move& m, l)
-        if (m.isDiagonalKill() && m.kills().front() == p)
             return true;
     
     return false;
@@ -65,6 +54,19 @@ SquareT squareType(PlayerType t)
         return DefensePiece;
 }
 
+void GameState::initZobrist()
+{
+    static const SquareT types[] = {
+        AttackPiece, DefensePiece, Empty
+    };
+    
+    foreach_validSquare(i, j) for_(t, 0, 3)
+        GameState::zobrist[i][j][(int)types[t]] = rand();
+    
+    GameState::zobrist[0][0][true] = rand();
+    GameState::zobrist[0][0][false] = rand();
+}
+
 
 const double GameState::evalMin = double(INT_MIN);
 const double GameState::evalMax = double(INT_MAX);
@@ -83,6 +85,8 @@ const int GameState::attackMovesForward[5][2] = {
     {-1,0}, {-1,-1}, {-1, 1}, {0,-1}, {0,1}
 };
 
+uint GameState::zobrist[boardSize][boardSize][256];
+
 
 GameState::GameState()
 { }
@@ -96,17 +100,14 @@ void GameState::init()
 {
     attackSz = 0;
     
-    foreach_validSquare(i, j)
-        if (isInsideFortress(i, j)) {
-            board[i][j] = Empty;
-        }
-        else {
-            board[i][j] = AttackPiece;
-            ++attackSz;
-        }
+    memset(board, Empty, sizeof board);
+    
+    foreach_validSquare(i, j) if (!isInsideFortress(i,j)) {
+        board[i][j] = AttackPiece;
+        ++attackSz;
+    }
     
     defenseSz = 0;
-    has_def = false;
     defA = defB = QPoint(0, 0);
     movA.clear();
     movB.clear();
@@ -115,14 +116,15 @@ void GameState::init()
 
 void GameState::copy(const GameState& st)
 {
+    max = st.max;
+    _hash = st._hash;
     attackSz = st.attackSz;
     defenseSz = st.defenseSz;
-    has_def = st.has_def;
+    attackOnFort = st.attackOnFort;
     defA = st.defA;
     defB = st.defB;
     movA = st.movA;
     movB = st.movB;
-    attackOnFort = st.attackOnFort;
     memcpy(board, st.board, sizeof board);
 }
 
@@ -150,6 +152,11 @@ bool GameState::gameOver(PlayerType& p) const
 bool GameState::almostOver() const
 {
     return attackOnFort == 8 || attackSz == 9;
+}
+
+bool GameState::isMax() const
+{
+    return max;
 }
 
 uint GameState::attackSize() const
@@ -181,28 +188,31 @@ void GameState::insertDefensePiece(int i, int j)
 {
     board[i][j] = DefensePiece;
     
-    if (has_def) throw "GameState::insertDefensePiece";
-    
     if (defA.isNull())
         defA = QPoint(i, j);
     else if (defB.isNull()) {
         defB = QPoint(i, j);
-        has_def = true;
+        max = true;
+        initHash();
         initRound();
     }
     
     ++defenseSz;
 }
 
-void GameState::set(int i, int j, SquareT t)
+void GameState::set(int i, int j, SquareT newP)
 {
-    if (board[i][j] == AttackPiece && isInsideFortress(i,j))
+    SquareT oldP = board[i][j];
+    board[i][j] = newP;
+    
+    if (oldP == AttackPiece && isInsideFortress(i,j))
         --attackOnFort;
     
-    board[i][j] = t;
-    
-    if (t == AttackPiece && isInsideFortress(i, j))
+    if (newP == AttackPiece && isInsideFortress(i, j))
         ++attackOnFort;
+    
+    _hash ^= zobrist[i][j][(int)oldP];
+    _hash ^= zobrist[i][j][(int)newP];
 }
 
 void GameState::set(const QPoint& p, SquareT t)
@@ -212,22 +222,23 @@ void GameState::set(const QPoint& p, SquareT t)
 
 void GameState::move(const Move& m)
 {            
-    if (!m.isDiagonalKill()) {
-        set(m.destiny(), get(m.origin()));
-        set(m.origin(), Empty);
-    }
+    set(m.destiny(), get(m.origin()));
+    set(m.origin(), Empty);
     
-    foreach (const QPoint& p, m.kills()) set(p, Empty);
+    foreach (const QPoint& p, m.kills())
+        set(p, Empty);
     
     attackSz -= m.killSize();
 
-    if (!m.isDiagonalKill()) {
-        if (m.origin() == defA)
-            defA = m.destiny();
-        else if (m.origin() == defB)
-            defB = m.destiny();
-    }
-        
+    if (m.origin() == defA)
+        defA = m.destiny();
+    else if (m.origin() == defB)
+        defB = m.destiny();    
+    
+    _hash ^= zobrist[0][0][max];
+    max = !max;
+    _hash ^= zobrist[0][0][max];
+    
     initRound();
 }
 
@@ -248,12 +259,8 @@ const QList<Move> GameState::moves(int i, int j) const
 {    
     if (board[i][j] == AttackPiece)
         return attackMoves(i, j);
-    else if (board[i][j] == DefensePiece)
+    else
         return defenseMoves(i, j);
-    else {
-        throw "GameState::moves";
-        return QList<Move>();
-    }
 }
  
 const QList<Move> GameState::moves(const PlayerType& p) const {    
@@ -312,7 +319,7 @@ const QList<Move> GameState::attackMoves(int i, int j) const
 
 const QList<Move> GameState::defenseMoves(int i, int j) const
 {
-    const QPoint p = QPoint(i, j);
+    const QPoint p(i, j);
     
     if (p == defA)
         return movA;
@@ -322,10 +329,16 @@ const QList<Move> GameState::defenseMoves(int i, int j) const
         throw "GameState::defenseMoves";
 }
 
-void GameState::initRound()
+void GameState::initHash()
 {
-    if (!has_def) throw "GameState::initRound";
+    _hash = zobrist[0][0][max];
     
+    foreach_validSquare(i, j)
+        _hash ^= zobrist[i][j][(int)board[i][j]];
+}
+
+void GameState::initRound()
+{    
     for (int k = 0; k < 2; ++k) {
         QPoint& p = !k ? defA : defB;
         
@@ -432,7 +445,7 @@ double GameState::eval() const
     for_(k, 0, 2) {
         QPoint p = !k ? defA : defB;
         int i = p.x(), j = p.y();
-        int di = max(0,i-2), dj;
+        int di = std::max(0,i-2), dj;
         
         if (j < 2) dj = 2 - j;
         else if (j > 4) dj = j - 4;
@@ -447,15 +460,20 @@ double GameState::eval() const
            28 * defenseBlockedH + 20 * defenseFortressDistH;
 }
 
+uint GameState::hash() const
+{
+    return _hash;
+}
+
 bool GameState::operator==(const GameState& st) const
 {
-    if (attackSz != st.attackSz         ||
-        defenseSz != st.defenseSz       ||
+    if (_hash != st._hash               ||
+        max != st.max                   || 
+        attackSz != st.attackSz         ||
         attackOnFort != st.attackOnFort ||
         defA != st.defA                 ||
-        defB != st.defB                 ||
-        movA != st.movA                 ||
-        movB != st.movB) return false;
+        defB != st.defB)
+        return false;
     
     return !memcmp(board, st.board, sizeof board);
 }
@@ -466,11 +484,8 @@ ostream& operator<<(ostream& out, const GameState& st)
     out << "GameState<" << endl
         << " attackSz = " << st.attackSz << endl
         << " defenseSz = " << st.defenseSz << endl
-        << " attacOnFort = " << st.attackOnFort << endl
-        << " has_def = " << st.has_def << endl
-        << " defA = " << st.defA << endl
+        << " attackOnFort = " << st.attackOnFort << endl
         << " movA = " << st.movA << endl
-        << " defB = " << st.defB << endl
         << " movB = " << st.movB << endl;
     
     for (int i = 0; i < boardSize; ++i) {
@@ -507,7 +522,6 @@ istream& operator>>(istream& in, GameState& st)
     st.attackOnFort = 0;
     st.attackSz = 0;
     st.defenseSz = 0;
-    st.has_def = false;
     st.defA = st.defB = QPoint(0, 0);
     memset(st.board, Empty, sizeof st.board);
     
@@ -524,6 +538,8 @@ istream& operator>>(istream& in, GameState& st)
         }
     }
     
+    st.initHash();
+    st.initRound();
     return in;
 }
 
@@ -560,11 +576,6 @@ void Move::setOrigin(const QPoint& p)
 const QPoint& Move::destiny() const
 {
     return dest;
-}
-
-bool Move::isDiagonalKill() const
-{    
-    return kill.size() && (dest == orig);
 }
 
 void Move::setDestiny(const QPoint& p)

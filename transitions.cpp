@@ -93,26 +93,6 @@ bool PieceClicked::trigger(int i, int j) const
 }
 
 
-DestDiagonalPieceClicked::DestDiagonalPieceClicked(Player* p)
-        : ConditionalSignalTransition(p, SIGNAL(pieceClicked(int,int)))
-{ }
-
-bool DestDiagonalPieceClicked::trigger(int i, int j) const
-{
-    QVariant l = player->getStateData()->value("destMoves");
-    QList<Move> moves = fromVariantList<Move>(l);
-    
-    if (isDiagonalKill(i, j, moves)) {
-        player->getStateData()->insert("selectedSquare", QPoint(i, j));
-        player->getStateData()->insert("destSquareClicked", true);
-        return true;
-    }
-    else {
-        return false;
-    }
-}
-
-
 DestSquareClicked::DestSquareClicked(Player* p)
         : ConditionalSignalTransition(p, SIGNAL(squareClicked(int,int)))
 { }
@@ -122,7 +102,7 @@ bool DestSquareClicked::trigger(int i, int j) const
     QVariant l = player->getStateData()->value("destMoves");
     QList<Move> moves = fromVariantList<Move>(l);
     
-    if (isDestinySquare(i, j, moves) || isDiagonalKill(i, j, moves)) {
+    if (isDestinySquare(i, j, moves)) {
         player->getStateData()->insert("selectedSquare", QPoint(i, j));
         player->getStateData()->insert("destSquareClicked", true);
         return true;

@@ -43,14 +43,6 @@ protected:
     bool trigger(int, int) const;
 };
 
-class DestDiagonalPieceClicked : public ConditionalSignalTransition
-{
-public:
-    DestDiagonalPieceClicked(Player*);
-protected:
-    bool trigger(int, int) const;
-};
-
 class DestSquareClicked : public ConditionalSignalTransition
 {
 public:

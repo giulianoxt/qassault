@@ -24,6 +24,10 @@ extern int aiWaitTime;
 
 extern int movingAnimationDuration;
 
+extern int cacheSize;
+
+extern int cacheDepth;
+
 extern int moveLookaheads;
 
 #endif // GLOBALS_H

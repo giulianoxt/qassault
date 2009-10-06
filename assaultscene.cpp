@@ -36,13 +36,11 @@ void AssaultScene::insertPiece(int i, int j, PlayerType p) {
 
 void AssaultScene::movePiece(const Move& m)
 {
-    if (!m.isDiagonalKill()) {
-        int i = m.origin().x(), j = m.origin().y();
-        int ni = m.destiny().x(), nj = m.destiny().y();
+    int i = m.origin().x(), j = m.origin().y();
+    int ni = m.destiny().x(), nj = m.destiny().y();
     
-        pieces[ni][nj] = pieces[i][j];
-        pieces[ni][nj]->move(ni, nj);
-    }
+    pieces[ni][nj] = pieces[i][j];
+    pieces[ni][nj]->move(ni, nj);
     
     foreach (const QPoint& p, m.kills()) {
         int i = p.x(), j = p.y();
